@@ -13,13 +13,17 @@ namespace JDM_Casus_Blok4.UserClasses
         public string Email { get; set; }
         public string Password { get; set; }
 
+        // lege constructor zodat 'base:()' werkt voor nu
+        protected User()
+        {
+            
+        }
         public User(string userName, string email, string password)
         {         
             UserName = userName;
             Email = email;
             Password = password;
         }
-
 
         public User(string id, string userName, string email, string password)
         {
