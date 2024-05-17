@@ -17,7 +17,7 @@ namespace JDM_Casus_Blok4.Classes
         public int MaxScore { get; set; }
 
 
-        public Exercise(int id, int exerciseNumber, string name, int score, int maxScore) 
+        public Exercise(int id, int exerciseNumber, string name, int score, int maxScore)
         {
             Id = id;
             ExerciseNumber = exerciseNumber;
@@ -25,7 +25,7 @@ namespace JDM_Casus_Blok4.Classes
             Score = score;
             MaxScore = maxScore;
         }
-        public Exercise(int exerciseNumber, string name, int score, int maxScore) 
+        public Exercise(int exerciseNumber, string name, int score, int maxScore)
         {
             ExerciseNumber = exerciseNumber;
             Name = name;
