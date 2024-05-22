@@ -5,8 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace JDM_Casus_Blok4.UserClasses
-{
-    internal abstract class User
+{ 
+    public abstract class User
     {
         public string Id{ get; set; }
         public string UserName { get; set; }
