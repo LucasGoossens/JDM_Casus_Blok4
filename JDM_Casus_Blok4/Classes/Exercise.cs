@@ -8,7 +8,7 @@ using System.Xml.Linq;
 
 namespace JDM_Casus_Blok4.Classes
 {
-    internal class Exercise
+    public class Exercise
     {
         public int Id { get; set; }
         public int ExerciseNumber { get; set; }

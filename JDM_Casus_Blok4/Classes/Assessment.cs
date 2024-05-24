@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace JDM_Casus_Blok4.Classes
 {
-    internal class Assessment
+    public class Assessment
     {
         public int Id { get; set; }
         public List<Exercise> Exercises { get; set; }

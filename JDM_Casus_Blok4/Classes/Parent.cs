@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace JDM_Casus_Blok4.Classes
 {
-    internal class Parent : User
+    public class Parent : User
 
     {
         public List<Child> Children { get; set; }
