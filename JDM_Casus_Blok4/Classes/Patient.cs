@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace JDM_Casus_Blok4.Classes
 {
-    public class Child : User
+    public class Patient : User
     {
-        public Child() : base()
+        public Patient() : base()
         {
             
         }

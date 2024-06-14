@@ -9,11 +9,11 @@ namespace JDM_Casus_Blok4.Classes
 {
     public class PhisicalTherapist : User
     {
-        public List<Child> Patients { get; set; }
+        public List<Patient> Patients { get; set; }
 
         public void ValidateAssessment()
         {
-            Patients = new List<Child>();
+            Patients = new List<Patient>();
         }
 
         public void EnterAssessment()

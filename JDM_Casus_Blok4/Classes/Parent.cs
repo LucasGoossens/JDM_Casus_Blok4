@@ -10,22 +10,22 @@ namespace JDM_Casus_Blok4.Classes
     public class Parent : User
 
     {
-        public List<Child> Children { get; set; }
+        public List<Patient> Patient { get; set; }
 
         // Constructor zonder parameters
         public Parent()
         {
-            Children = new List<Child>();
+            Patient = new List<Patient>();
         }
 
         // Constructor met parameters
-        public Parent(string id, string userName, string email, string password, List<Child> children)
+        public Parent(string id, string userName, string email, string password, List<Patient> patient)
         {
             Id = id;
             UserName = userName;
             Email = email;
             Password = password;
-            Children = children ?? new List<Child>();
+            Patient = patient ?? new List<Patient>();
         }
     }
 }

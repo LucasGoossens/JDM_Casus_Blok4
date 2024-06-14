@@ -9,14 +9,14 @@ namespace JDM_Casus_Blok4.Classes
 {
     public class Doctor : User
     {
-        public List<Child> Patients { get; set; }
+        public List<Patient> Patients { get; set; }
         public List<Parent> PatientParents { get; set; }
 
         public void ViewProgression() { }
         public void ValidateAssessment() { }
         public void ViewAssessments() { }
         public void DefineFrequency() { }
-        public void CreateChildAccount() { }
-        public void CreateParentAccount(Child child) { }
+        public void CreatePatientAccount() { }
+        public void CreateParentAccount(Patient patient) { }
     }
 }
