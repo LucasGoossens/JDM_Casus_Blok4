@@ -4,7 +4,7 @@ using System.Data;
 
 internal class Program
 {
-    public List<Patient> testPatients = new List<Patient>();
+    static public List<Patient> testPatients = new List<Patient>();
     static public Doctor testDoctor = new Doctor();
     static void Main(string[] args)
     {
@@ -16,13 +16,14 @@ internal class Program
             List<Exercise> testExerciseList = new List<Exercise>();
             for (int j = 0; j < 3; j++)
             {
-                Exercise testExercise = new Exercise(i+j, "test", 80, 100);
+                Exercise testExercise = new Exercise(i + j, "test", 80, 100);
                 testExerciseList.Add(testExercise);
             }
             DateTime testDate = DateTime.Now;
 
             Assessment testAssessment = new Assessment(i, testExerciseList, testDate, false, 100);
-            Patient newPatient = new Patient();
+            Patient newPatient = new Patient(i, $"testname{i}", "testmail", "testpassword");
+            testPatients.Add(newPatient);
             newPatient.Assessments.Add(testAssessment);
             testDoctor.Patients.Add(newPatient);
         }
@@ -61,7 +62,7 @@ internal class Program
                 //ParentMenu();
                 break;
             case 3:
-                //DoctorMenu();
+                DoctorMenu();
                 break;
             case 4:
             //PhysicalTherapistMenu();
@@ -207,6 +208,52 @@ internal class Program
             case 2:
                 break;
         }
+    }
+
+    public static void DoctorMenu()
+    {
+        List<string> patientOptions = new List<string>();
+
+        foreach (Patient patient in testPatients)
+        {
+            patientOptions.Add($"{patient.UserName}");
+
+        }
+        int patientId = DisplayMenuOptions(patientOptions, "Select patient ID to view.") -1;
+
+        Patient newPatient = testPatients.Find(x => x.Id == patientId);
+
+        List<string> options = new List<string>{            
+            "View Progression(werkt niet)",
+            "View Assessment"
+        };
+
+        int choice = DisplayMenuOptions(options, "Select patient ID to view. - Press 0 to return to main menu");
+
+        switch (choice)
+        {
+            case 0:
+                MainMenu();
+                break;
+            case 1:
+                //PatientViewProgression(newPatient);
+                break;
+            case 2:
+                ViewAssessment(newPatient);
+                break;
+            case 3:
+                //ChooseFrequency(newPatient);
+                break;
+
+        }
+
+
+
+    }
+
+    public static void ViewAssessment(Patient patient)
+    {
+        Console.WriteLine($"View assessment placeholder: {patient.UserName}");
     }
 
     public static void ClearCurrentConsoleLine()

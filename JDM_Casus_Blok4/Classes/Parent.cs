@@ -19,7 +19,7 @@ namespace JDM_Casus_Blok4.Classes
         }
 
         // Constructor met parameters
-        public Parent(string id, string userName, string email, string password, List<Patient> patient)
+        public Parent(int id, string userName, string email, string password, List<Patient> patient)
         {
             Id = id;
             UserName = userName;
