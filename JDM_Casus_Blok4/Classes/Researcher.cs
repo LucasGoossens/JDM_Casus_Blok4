@@ -26,7 +26,7 @@ namespace JDM_Casus_Blok4.Classes
             Console.WriteLine("Assessments:");
             foreach (Patient patient in AllPatient)
             {
-                Console.WriteLine($"Patient: {patient.Name}");
+                Console.WriteLine($"Patient: {patient.UserName}");
                 foreach (var assessment in patient.Assessments)
                 {
                     Console.WriteLine($"- {assessment}");
