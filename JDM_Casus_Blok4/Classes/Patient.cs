@@ -9,6 +9,7 @@ namespace JDM_Casus_Blok4.Classes
 {
     public class Patient : User
     {
+        public List<Assessment> Assessments { get; set; }
         public Patient() : base()
         {
             

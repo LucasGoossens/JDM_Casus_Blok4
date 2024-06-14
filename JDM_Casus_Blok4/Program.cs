@@ -1,13 +1,31 @@
 ﻿
 using JDM_Casus_Blok4.Classes;
+using System.Data;
 
 internal class Program
 {
-
+    public List<Patient> testPatients = new List<Patient>();
+    static public Doctor testDoctor = new Doctor();
     static void Main(string[] args)
     {
         Console.WriteLine("Hello world!");
 
+        // loop om test/mock/dummy objects toe te voegen 
+        for (int i = 0; i < 3; i++)
+        {
+            List<Exercise> testExerciseList = new List<Exercise>();
+            for (int j = 0; j < 3; j++)
+            {
+                Exercise testExercise = new Exercise(i+j, "test", 80, 100);
+                testExerciseList.Add(testExercise);
+            }
+            DateTime testDate = DateTime.Now;
+
+            Assessment testAssessment = new Assessment(i, testExerciseList, testDate, false, 100);
+            Patient newPatient = new Patient();
+            newPatient.Assessments.Add(testAssessment);
+            testDoctor.Patients.Add(newPatient);
+        }
 
         bool flag = true;
         while (flag)
@@ -43,7 +61,8 @@ internal class Program
                 //ParentMenu();
                 break;
             case 3:
-            //DoctorMenu();
+                //DoctorMenu();
+                break;
             case 4:
             //PhysicalTherapistMenu();
             case 5:
@@ -76,7 +95,7 @@ internal class Program
         }
     }
 
-    public static Assessment EnterAssessment()
+    public static void EnterAssessment()
     {
         Console.Clear();
         Console.WriteLine("Exercise 1: Head elevation");
@@ -129,7 +148,7 @@ internal class Program
         Console.WriteLine("");
 
         PatientMenu();
-        return new Assessment
+
     }
 
     public static void PatientViewProgression()
