@@ -44,13 +44,13 @@ internal class Program
             Console.WriteLine("");
             MainMenu();
 
-                flag = false;
-            }
+            flag = false;
         }
+    }
 
-        public static void MainMenu()
-        {
-            List<string> options = new List<string> {
+    public static void MainMenu()
+    {
+        List<string> options = new List<string> {
                 "Patient",
                 "Parent",
                 "Doctor",
@@ -58,7 +58,7 @@ internal class Program
                 "Researcher",
             };
 
-            int choice = DisplayMenuOptions(options, "Main menu - select the type of person you want to login with");
+        int choice = DisplayMenuOptions(options, "Main menu - select the type of person you want to login with");
 
         switch (choice)
         {
@@ -80,28 +80,28 @@ internal class Program
         }
     }
 
-        public static void PatientMenu()
-        {
-            List<string> options = new List<string> {
+    public static void PatientMenu()
+    {
+        List<string> options = new List<string> {
                 "Enter assessment",
                 "View progression",
             };
 
-            int choice = DisplayMenuOptions(options, "Patient menu - press '0' to choose another login");
+        int choice = DisplayMenuOptions(options, "Patient menu - press '0' to choose another login");
 
-            switch (choice)
-            {
-                case 0:
-                    MainMenu();
-                    break;
-                case 1:
-                    EnterAssessment();
-                    break;
-                case 2:
-                    PatientViewProgression();
-                    break;
-            }
+        switch (choice)
+        {
+            case 0:
+                MainMenu();
+                break;
+            case 1:
+                EnterAssessment();
+                break;
+            case 2:
+                PatientViewProgression();
+                break;
         }
+    }
 
     public static void EnterAssessment()
     {
@@ -156,7 +156,7 @@ internal class Program
         //Console.WriteLine("");         
 
 
-       
+
 
         Assessment newAssessment = new Assessment(false);
 
@@ -181,49 +181,49 @@ internal class Program
 
     }
 
-        public static void PatientViewProgression()
+    public static void PatientViewProgression()
+    {
+        List<string> options = new List<string> { };
+
+        Console.Clear();
+        Console.WriteLine();
+        int[] data = { 5, 6, 8, 10, 11, 11, 8, 9, 12, 15 };
+
+        // Find the maximum value in the data
+        int maxValue = 0;
+        foreach (int value in data)
         {
-            List<string> options = new List<string> { };
+            if (value > maxValue)
+                maxValue = value;
+        }
 
-            Console.Clear();
-            Console.WriteLine();
-            int[] data = { 5, 6, 8, 10, 11, 11, 8, 9, 12, 15 };
-
-            // Find the maximum value in the data
-            int maxValue = 0;
+        // Draw the graph
+        Console.WriteLine("   ^");
+        Console.WriteLine("   |");
+        Console.WriteLine("   |");
+        for (int i = maxValue; i > 0; i--)
+        {
+            Console.Write($"   |");
             foreach (int value in data)
             {
-                if (value > maxValue)
-                    maxValue = value;
+                if (value >= i)
+                    Console.Write(" * ");
+                else
+                    Console.Write("   ");
             }
+            Console.WriteLine();
+        }
 
-            // Draw the graph
-            Console.WriteLine("   ^");
-            Console.WriteLine("   |");
-            Console.WriteLine("   |");
-            for (int i = maxValue; i > 0; i--)
-            {
-                Console.Write($"   |");
-                foreach (int value in data)
-                {
-                    if (value >= i)
-                        Console.Write(" * ");
-                    else
-                        Console.Write("   ");
-                }
-                Console.WriteLine();
-            }
+        // Print the x-axis labels
+        Console.Write("   +");
+        for (int i = 0; i < data.Length * 3; i++)
+        {
+            Console.Write("-");
+        }
+        Console.WriteLine(">");
+        Console.WriteLine("");
 
-            // Print the x-axis labels
-            Console.Write("   +");
-            for (int i = 0; i < data.Length * 3; i++)
-            {
-                Console.Write("-");
-            }
-            Console.WriteLine(">");
-            Console.WriteLine("");
-
-            int choice = DisplayMenuOptions(options, "press '0' to go back to the main menu", false);
+        int choice = DisplayMenuOptions(options, "press '0' to go back to the main menu", false);
 
         switch (choice)
         {
@@ -247,7 +247,7 @@ internal class Program
         int Patientchoice = DisplayMenuOptions(patientOptions, "Select patient to view.") - 1;
         Patient patientToView = parent.Patients[Patientchoice];
 
-            List<string> options = new List<string>
+        List<string> options = new List<string>
         {
             "View progression",
             "View assessment",
@@ -255,7 +255,7 @@ internal class Program
         };
 
         int choice = DisplayMenuOptions(options, "Parent menu - press '0' to choose another login");
-        
+
 
         switch (choice)
         {
@@ -367,75 +367,63 @@ internal class Program
         }
     }
 
-        public static void ResearcherMenu()
-        {
-            List<string> options = new List<string> {
+    public static void ResearcherMenu()
+    {
+        List<string> options = new List<string> {
                 "View assessments",
             };
 
-            int choice = DisplayMenuOptions(options, "Researcher menu - press '0' to choose another login");
+        int choice = DisplayMenuOptions(options, "Researcher menu - press '0' to choose another login");
 
-            switch (choice)
-            {
-                case 0:
-                    MainMenu();
-                    break;
-                case 1:
-                    ViewAssessments();
-                    break;
-            }
+        switch (choice)
+        {
+            case 0:
+                MainMenu();
+                break;
+            case 1:
+                ViewAssessmentsResearcher();
+                break;
         }
+    }
 
-        public static void ViewAssessments()
+    public static void ViewAssessmentsResearcher()
+    {
+        // nog toe te passen 
+    }
+
+    public static void ClearCurrentConsoleLine()
+    {
+        int currentLineCursor = Console.CursorTop;
+        Console.SetCursorPosition(0, Console.CursorTop);
+        Console.Write(new string(' ', Console.WindowWidth));
+        Console.SetCursorPosition(0, currentLineCursor);
+    }
+
+    public static int DisplayMenuOptions(List<string> options, string title = "", bool clearConsole = true)
+    {
+        if (clearConsole)
         {
             Console.Clear();
-            Console.WriteLine("Viewing all assessments...");
-
-            Researcher researcher = new Researcher();
-            // Add some dummy patients for testing
-            researcher.AllPatients.Add(new Patient("John Doe") { Assessments = new List<string> { "Assessment 1", "Assessment 2" } });
-            researcher.AllPatients.Add(new Patient("Jane Smith") { Assessments = new List<string> { "Assessment A", "Assessment B" } });
-
-            researcher.ViewAssessments();
-
-            // Go back to the ResearcherMenu after viewing assessments
-            ResearcherMenu();
         }
-
-        public static void ClearCurrentConsoleLine()
+        if (title != "")
         {
-            int currentLineCursor = Console.CursorTop;
-            Console.SetCursorPosition(0, Console.CursorTop);
-            Console.Write(new string(' ', Console.WindowWidth));
-            Console.SetCursorPosition(0, currentLineCursor);
+            Console.WriteLine(title);
+            Console.WriteLine();
         }
-
-        public static int DisplayMenuOptions(List<string> options, string title = "", bool clearConsole = true)
+        for (int i = 0; i < options.Count; i++)
         {
-            if (clearConsole)
-            {
-                Console.Clear();
-            }
-            if (title != "")
-            {
-                Console.WriteLine(title);
-                Console.WriteLine();
-            }
-            for (int i = 0; i < options.Count; i++)
-            {
-                Console.WriteLine($"{i + 1}. {options[i]}");
-            }
-            Console.WriteLine("");
-            try
-            {
-                int choice = Convert.ToInt32(Console.ReadLine());
-                return choice;
-            }
-            catch
-            {
-                Console.WriteLine("Invalid choice. Please try again.");
-                return DisplayMenuOptions(options, title, clearConsole);
-            }
+            Console.WriteLine($"{i + 1}. {options[i]}");
+        }
+        Console.WriteLine("");
+        try
+        {
+            int choice = Convert.ToInt32(Console.ReadLine());
+            return choice;
+        }
+        catch
+        {
+            Console.WriteLine("Invalid choice. Please try again.");
+            return DisplayMenuOptions(options, title, clearConsole);
         }
     }
 }
