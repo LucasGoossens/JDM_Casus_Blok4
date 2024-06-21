@@ -16,21 +16,41 @@ namespace JDM_Casus_Blok4.Classes
         public int Score { get; set; }
         public int MaxScore { get; set; }
 
+        public List<string> ResultOptions { get; set; }
+        public Exercise()
+        {
 
-        public Exercise(int id, int exerciseNumber, string name, int score, int maxScore)
+        }
+        public Exercise(int id, int exerciseNumber, string name, int score, int maxScore, List<string> resultOptions)
         {
             Id = id;
             ExerciseNumber = exerciseNumber;
             Name = name;
             Score = score;
             MaxScore = maxScore;
+            ResultOptions = resultOptions;
         }
-        public Exercise(int exerciseNumber, string name, int score, int maxScore)
+        public Exercise(int exerciseNumber, string name, int score, int maxScore, List<string> resultOptions)
         {
             ExerciseNumber = exerciseNumber;
             Name = name;
             Score = score;
             MaxScore = maxScore;
+            ResultOptions = resultOptions;
+        }
+
+        public Exercise(int exerciseNumber, string name, List<string> resultOptions)
+        {
+            ExerciseNumber = exerciseNumber;
+            Name = name;
+            ResultOptions = resultOptions;
+        }
+
+        public Exercise(int exerciseNumber, string name, int score)
+        {
+            ExerciseNumber = exerciseNumber;
+            Name = name;
+            Score = score;
         }
     }
 }

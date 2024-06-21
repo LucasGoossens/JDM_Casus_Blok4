@@ -1,11 +1,18 @@
 ﻿
 using JDM_Casus_Blok4.Classes;
+using JDM_Casus_Blok4.UserClasses;
 using System.Data;
 
 internal class Program
 {
     static public List<Patient> testPatients = new List<Patient>();
     static public Doctor testDoctor = new Doctor();
+    static public List<Exercise> CMAS = new List<Exercise>
+    {
+        new Exercise(1, "Head elevation",  new List<string> { "0 = unable", "1 = 1-9 seconds", "2 = 10-29 seconds", "3 = 30-59 seconds", "4 = 60-119 seconds", "5 = >2 minutes" }),
+        new Exercise(2, "Leg raise",  new List<string> { "0 = unable to lift leg off table", "1 = able to clear table but cannot touch object", "2 = able to lift leg high enough to touch object" }),
+        new Exercise(3, "Straight leg lift", new List<string> { "0 = unable", "1 = 1-9 seconds", "2 = 10-29 seconds", "3 = 30-59 seconds", "4 = 60-119 seconds", "5 = >2 minutes" }),
+    };
     static void Main(string[] args)
     {
         Console.WriteLine("Hello world!");
@@ -13,15 +20,11 @@ internal class Program
         // loop om test/mock/dummy objects toe te voegen 
         for (int i = 0; i < 3; i++)
         {
-            List<Exercise> testExerciseList = new List<Exercise>();
-            for (int j = 0; j < 3; j++)
-            {
-                Exercise testExercise = new Exercise(i + j, "test", 80, 100);
-                testExerciseList.Add(testExercise);
-            }
+
+
             DateTime testDate = DateTime.Now;
 
-            Assessment testAssessment = new Assessment(i, testExerciseList, testDate, false, 100);
+            Assessment testAssessment = new Assessment(i, CMAS, testDate, false, 100);
             Patient newPatient = new Patient(i, $"testname{i}", "testmail", "testpassword");
             testPatients.Add(newPatient);
             newPatient.Assessments.Add(testAssessment);
@@ -98,55 +101,77 @@ internal class Program
 
     public static void EnterAssessment()
     {
-        Console.Clear();
-        Console.WriteLine("Exercise 1: Head elevation");
-        Console.WriteLine("");
-        Console.WriteLine("0 = unable");
-        Console.WriteLine("1 = 1-9 seconds");
-        Console.WriteLine("2 = 10-29 seconds");
-        Console.WriteLine("3 = 30-59 seconds");
-        Console.WriteLine("4 = 60-119 seconds");
-        Console.WriteLine("5 = >2 minutes");
-        Console.WriteLine("");
-        int exercise1Score = Convert.ToInt32(Console.ReadLine());
-        Console.SetCursorPosition(0, Console.CursorTop - 1);
-        ClearCurrentConsoleLine();
-        Console.WriteLine($"Score entered {exercise1Score}");
-        Console.WriteLine("");
-        Console.WriteLine("----------------");
-        Console.WriteLine("");
+        //Console.Clear();
+        //Console.WriteLine("Exercise 1: Head elevation");
+        //Console.WriteLine("");
+        //Console.WriteLine("0 = unable");
+        //Console.WriteLine("1 = 1-9 seconds");
+        //Console.WriteLine("2 = 10-29 seconds");
+        //Console.WriteLine("3 = 30-59 seconds");
+        //Console.WriteLine("4 = 60-119 seconds");
+        //Console.WriteLine("5 = >2 minutes");
+        //Console.WriteLine("");
+        //int exercise1Score = Convert.ToInt32(Console.ReadLine());
+        //Console.SetCursorPosition(0, Console.CursorTop - 1);
+        //ClearCurrentConsoleLine();
+        //Console.WriteLine($"Score entered {exercise1Score}");
+        //Console.WriteLine("");
+        //Console.WriteLine("----------------");
+        //Console.WriteLine("");
 
-        Console.WriteLine("Exercise 2: Leg raise");
-        Console.WriteLine("");
-        Console.WriteLine("0 = unable to lift leg off table");
-        Console.WriteLine("1 = able to clear table but cannot touch object");
-        Console.WriteLine("2 = able to lift leg high enough to touch object");
-        Console.WriteLine("");
-        int exercise2Score = Convert.ToInt32(Console.ReadLine());
-        Console.SetCursorPosition(0, Console.CursorTop - 1);
-        ClearCurrentConsoleLine();
-        Console.WriteLine($"Score entered {exercise2Score}");
-        Console.WriteLine("");
-        Console.WriteLine("----------------");
-        Console.WriteLine("");
+        //Console.WriteLine("Exercise 2: Leg raise");
+        //Console.WriteLine("");
+        //Console.WriteLine("0 = unable to lift leg off table");
+        //Console.WriteLine("1 = able to clear table but cannot touch object");
+        //Console.WriteLine("2 = able to lift leg high enough to touch object");
+        //Console.WriteLine("");
+        //int exercise2Score = Convert.ToInt32(Console.ReadLine());
+        //Console.SetCursorPosition(0, Console.CursorTop - 1);
+        //ClearCurrentConsoleLine();
+        //Console.WriteLine($"Score entered {exercise2Score}");
+        //Console.WriteLine("");
+        //Console.WriteLine("----------------");
+        //Console.WriteLine("");
 
 
-        Console.WriteLine("Exercise 3: Straight leg lift");
-        Console.WriteLine("");
-        Console.WriteLine("0 = unable");
-        Console.WriteLine("1 = 1-9 seconds");
-        Console.WriteLine("2 = 10-29 seconds");
-        Console.WriteLine("3 = 30-59 seconds");
-        Console.WriteLine("4 = 60-119 seconds");
-        Console.WriteLine("5 = >2 minutes");
-        Console.WriteLine("");
-        int exercise3Score = Convert.ToInt32(Console.ReadLine());
-        Console.SetCursorPosition(0, Console.CursorTop - 1);
-        ClearCurrentConsoleLine();
-        Console.WriteLine($"Score entered {exercise3Score}");
-        Console.WriteLine("");
-        Console.WriteLine("----------------");
-        Console.WriteLine("");
+        //Console.WriteLine("Exercise 3: Straight leg lift");
+        //Console.WriteLine("");
+        //Console.WriteLine("0 = unable");
+        //Console.WriteLine("1 = 1-9 seconds");
+        //Console.WriteLine("2 = 10-29 seconds");
+        //Console.WriteLine("3 = 30-59 seconds");
+        //Console.WriteLine("4 = 60-119 seconds");
+        //Console.WriteLine("5 = >2 minutes");
+        //Console.WriteLine("");
+        //int exercise3Score = Convert.ToInt32(Console.ReadLine());
+        //Console.SetCursorPosition(0, Console.CursorTop - 1);
+        //ClearCurrentConsoleLine();
+        //Console.WriteLine($"Score entered {exercise3Score}");
+        //Console.WriteLine("");
+        //Console.WriteLine("----------------");
+        //Console.WriteLine("");         
+
+
+       
+
+        Assessment newAssessment = new Assessment(false);
+
+        foreach (Exercise exerciseTemplate in CMAS)
+        {
+            Console.WriteLine($"Exercise {exerciseTemplate.ExerciseNumber}: {exerciseTemplate.Name}");
+            Console.WriteLine("");
+            foreach (string result in exerciseTemplate.ResultOptions)
+            {
+                Console.WriteLine(result);
+            }
+            // hier zit nog geen invoer validatie
+            Exercise newExercise = new Exercise(exerciseTemplate.ExerciseNumber, exerciseTemplate.Name, Convert.ToInt32(Console.ReadLine()));
+            newAssessment.AddExercise(newExercise);
+            Console.SetCursorPosition(0, Console.CursorTop - 1);
+            ClearCurrentConsoleLine();
+        }
+        // die assessment moet nog toegevoegd worden aan de patient
+
 
         PatientMenu();
 
@@ -219,11 +244,11 @@ internal class Program
             patientOptions.Add($"{patient.UserName}");
 
         }
-        int patientId = DisplayMenuOptions(patientOptions, "Select patient ID to view.") -1;
+        int patientId = DisplayMenuOptions(patientOptions, "Select patient ID to view.") - 1;
 
         Patient newPatient = testPatients.Find(x => x.Id == patientId);
 
-        List<string> options = new List<string>{            
+        List<string> options = new List<string>{
             "View Progression(werkt niet)",
             "View Assessment"
         };
