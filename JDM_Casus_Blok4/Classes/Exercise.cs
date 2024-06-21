@@ -59,7 +59,10 @@ namespace JDM_Casus_Blok4.Classes
             Console.WriteLine($"Name: {Name}");
             Console.WriteLine($"Score: {Score}");
             Console.WriteLine($"Max score: {MaxScore}");
-            Console.WriteLine($"Feedback: {Feedback.Message}");
+            if (Feedback != null)
+            {
+                Console.WriteLine($"Feedback: {Feedback.Message}");
+            }
         }   
     }
 }

@@ -322,13 +322,11 @@ internal class Program
             case 3:
                 //ChooseFrequency(newPatient);
                 break;
-            case 4:
-                ValidateAssessment(newPatient, doctor);
-                break;
+            //case 4:
+            //    ValidateAssessment(newPatient, doctor);
+            //    break;
 
         }
-
-
 
     }
 
@@ -369,6 +367,7 @@ internal class Program
                         validInput = true;
                         break;
                     case 3:
+                        if (assessmentToView.Validated == true) break; // "3. Validate assessment" wordt niet geprint, maar kunt zonder deze line nog steeds op 3 drukken
                         assessmentToView.MakeValidated(user);
                         break;
                     default:
@@ -382,11 +381,6 @@ internal class Program
                 Console.WriteLine("Invalid choice. Please try again.");
             }
         }
-    }
-
-    public static void ValidateAssessment()
-    {
-
     }
 
     public static void ResearcherMenu()
