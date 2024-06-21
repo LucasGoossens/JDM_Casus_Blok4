@@ -20,9 +20,9 @@ namespace JDM_Casus_Blok4.Classes
         public Feedback Feedback { get; set; }
 
         // from database
-        
+
         public Assessment() { }
-        
+
         public Assessment(int id, List<Exercise> exercises, DateOnly date, bool validated, int totalScore)
         {
             Id = id;
@@ -66,7 +66,10 @@ namespace JDM_Casus_Blok4.Classes
             Console.WriteLine($"Date: {Date}");
             Console.WriteLine($"Total score: {TotalScore}");
             Console.WriteLine($"Validated: {Validated}");
-            Console.WriteLine($"Feedback: {Feedback.Message}");
+            if (Feedback != null)
+            {
+                Console.WriteLine($"Feedback: {Feedback.Message}");
+            }
             Console.WriteLine("Exercises:");
             foreach (Exercise exercise in Exercises)
             {
