@@ -9,10 +9,9 @@ namespace JDM_Casus_Blok4.Classes
 {
     public class Patient : User
     {
-        public string Name { get; set; }
-        public List<string> Assessments { get; set; }
-
-        public Patient(string name)
+        DateOnly DateOfBirth { get; set; }
+        public List<Assessment> Assessments = new List<Assessment>();
+        public Patient(int id, string userName, string email, string password) : base(id, userName, email, password)
         {
             Name = name;
             Assessments = new List<string>();

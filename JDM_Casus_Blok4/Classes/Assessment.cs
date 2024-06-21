@@ -1,4 +1,5 @@
-﻿using System;
+﻿using JDM_Casus_Blok4.UserClasses;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,9 +11,16 @@ namespace JDM_Casus_Blok4.Classes
     {
         public int Id { get; set; }
         public List<Exercise> Exercises { get; set; }
-        public DateTime Date { get; set; }
+        public DateOnly Date { get; set; }
         public bool Validated { get; set; }
         public int? TotalScore { get; set; }
+        public int ValidatorId { get; set; }
+        public int PatientAge { get; set; }
+        public int PatientId { get; set; }
+        public Feedback Feedback { get; set; }
+
+        // from database
+        public Assessment(int id, List<Exercise> exercises, DateOnly date, bool validated, int totalScore)
         public Assessment() { }
         
         public Assessment(int id, List<Exercise> exercises, DateTime date, bool validated, int totalScore)
@@ -29,7 +37,7 @@ namespace JDM_Casus_Blok4.Classes
             Exercises = new List<Exercise>();
             // invoer kind zal false zijn, van fysio true
             Validated = validated;
-            Date = DateTime.Now;
+            Date = DateOnly.FromDateTime(DateTime.Now);
         }
 
 
@@ -46,10 +54,31 @@ namespace JDM_Casus_Blok4.Classes
             }
 
         }
-        public void MakeValidated()
+        public void MakeValidated(User user)
         {
             Validated = true;
+            ValidatorId = user.Id;
+            // add reference to database
         }
 
+        public void VieuwAssessment()
+        {
+            Console.WriteLine($"Date: {Date}");
+            Console.WriteLine($"Total score: {TotalScore}");
+            Console.WriteLine($"Validated: {Validated}");
+            Console.WriteLine($"Feedback: {Feedback.Message}");
+            Console.WriteLine("Exercises:");
+            foreach (Exercise exercise in Exercises)
+            {
+                exercise.ViewExercise();
+            }
+        }
+
+        public static List<Assessment> GetAllAssessments()
+        {
+            List<Assessment> assessments = new List<Assessment>();
+            // get assessments from database
+            return assessments;
+        }
     }
 }

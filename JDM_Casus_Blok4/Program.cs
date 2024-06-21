@@ -5,19 +5,45 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace JDM_Casus_Blok4.Classes
-{
-    internal class Program
-    {
-        static void Main(string[] args)
-        {
-            Console.WriteLine("Hello world!");
+using JDM_Casus_Blok4.Classes;
+using JDM_Casus_Blok4.UserClasses;
+using System.Data;
+using System.Diagnostics.Metrics;
+using System.Security.Cryptography.X509Certificates;
 
-            bool flag = true;
-            while (flag)
-            {
-                Console.WriteLine("");
-                MainMenu();
+internal class Program
+{
+    static public List<Patient> testPatients = new List<Patient>();
+    static public Doctor testDoctor = new Doctor();
+    static public List<Exercise> CMAS = new List<Exercise>
+    {
+        new Exercise(1, "Head elevation",  new List<string> { "0 = unable", "1 = 1-9 seconds", "2 = 10-29 seconds", "3 = 30-59 seconds", "4 = 60-119 seconds", "5 = >2 minutes" }),
+        new Exercise(2, "Leg raise",  new List<string> { "0 = unable to lift leg off table", "1 = able to clear table but cannot touch object", "2 = able to lift leg high enough to touch object" }),
+        new Exercise(3, "Straight leg lift", new List<string> { "0 = unable", "1 = 1-9 seconds", "2 = 10-29 seconds", "3 = 30-59 seconds", "4 = 60-119 seconds", "5 = >2 minutes" }),
+    };
+    static void Main(string[] args)
+    {
+        Console.WriteLine("Hello world!");
+
+        // loop om test/mock/dummy objects toe te voegen 
+        for (int i = 0; i < 3; i++)
+        {
+
+
+            DateTime testDate = DateTime.Now;
+
+            Assessment testAssessment = new Assessment(i, CMAS, testDate, false, 100);
+            Patient newPatient = new Patient(i, $"testname{i}", "testmail", "testpassword");
+            testPatients.Add(newPatient);
+            newPatient.Assessments.Add(testAssessment);
+            testDoctor.Patients.Add(newPatient);
+        }
+
+        bool flag = true;
+        while (flag)
+        {
+            Console.WriteLine("");
+            MainMenu();
 
                 flag = false;
             }
@@ -35,25 +61,25 @@ namespace JDM_Casus_Blok4.Classes
 
             int choice = DisplayMenuOptions(options, "Main menu - select the type of person you want to login with");
 
-            switch (choice)
-            {
-                case 1:
-                    PatientMenu();
-                    break;
-                case 2:
-                    // ParentMenu();
-                    break;
-                case 3:
-                    // DoctorMenu();
-                    break;
-                case 4:
-                    // PhysicalTherapistMenu();
-                    break;
-                case 5:
-                    ResearcherMenu();
-                    break;
-            }
+        switch (choice)
+        {
+            case 1:
+                PatientMenu();
+                break;
+            case 2:
+                Parent parent = Parent.GetParent();
+                ParentMenu(parent);
+                break;
+            case 3:
+                DoctorMenu(testDoctor);
+                break;
+            case 4:
+            //PhysicalTherapistMenu();
+            case 5:
+                //ResearcherMenu();
+                break;
         }
+    }
 
         public static void PatientMenu()
         {
@@ -78,59 +104,83 @@ namespace JDM_Casus_Blok4.Classes
             }
         }
 
-        public static void EnterAssessment()
+    public static void EnterAssessment()
+    {
+        //Console.Clear();
+        //Console.WriteLine("Exercise 1: Head elevation");
+        //Console.WriteLine("");
+        //Console.WriteLine("0 = unable");
+        //Console.WriteLine("1 = 1-9 seconds");
+        //Console.WriteLine("2 = 10-29 seconds");
+        //Console.WriteLine("3 = 30-59 seconds");
+        //Console.WriteLine("4 = 60-119 seconds");
+        //Console.WriteLine("5 = >2 minutes");
+        //Console.WriteLine("");
+        //int exercise1Score = Convert.ToInt32(Console.ReadLine());
+        //Console.SetCursorPosition(0, Console.CursorTop - 1);
+        //ClearCurrentConsoleLine();
+        //Console.WriteLine($"Score entered {exercise1Score}");
+        //Console.WriteLine("");
+        //Console.WriteLine("----------------");
+        //Console.WriteLine("");
+
+        //Console.WriteLine("Exercise 2: Leg raise");
+        //Console.WriteLine("");
+        //Console.WriteLine("0 = unable to lift leg off table");
+        //Console.WriteLine("1 = able to clear table but cannot touch object");
+        //Console.WriteLine("2 = able to lift leg high enough to touch object");
+        //Console.WriteLine("");
+        //int exercise2Score = Convert.ToInt32(Console.ReadLine());
+        //Console.SetCursorPosition(0, Console.CursorTop - 1);
+        //ClearCurrentConsoleLine();
+        //Console.WriteLine($"Score entered {exercise2Score}");
+        //Console.WriteLine("");
+        //Console.WriteLine("----------------");
+        //Console.WriteLine("");
+
+
+        //Console.WriteLine("Exercise 3: Straight leg lift");
+        //Console.WriteLine("");
+        //Console.WriteLine("0 = unable");
+        //Console.WriteLine("1 = 1-9 seconds");
+        //Console.WriteLine("2 = 10-29 seconds");
+        //Console.WriteLine("3 = 30-59 seconds");
+        //Console.WriteLine("4 = 60-119 seconds");
+        //Console.WriteLine("5 = >2 minutes");
+        //Console.WriteLine("");
+        //int exercise3Score = Convert.ToInt32(Console.ReadLine());
+        //Console.SetCursorPosition(0, Console.CursorTop - 1);
+        //ClearCurrentConsoleLine();
+        //Console.WriteLine($"Score entered {exercise3Score}");
+        //Console.WriteLine("");
+        //Console.WriteLine("----------------");
+        //Console.WriteLine("");         
+
+
+       
+
+        Assessment newAssessment = new Assessment(false);
+
+        foreach (Exercise exerciseTemplate in CMAS)
         {
-            Console.Clear();
-            Console.WriteLine("Exercise 1: Head elevation");
+            Console.WriteLine($"Exercise {exerciseTemplate.ExerciseNumber}: {exerciseTemplate.Name}");
             Console.WriteLine("");
-            Console.WriteLine("0 = unable");
-            Console.WriteLine("1 = 1-9 seconds");
-            Console.WriteLine("2 = 10-29 seconds");
-            Console.WriteLine("3 = 30-59 seconds");
-            Console.WriteLine("4 = 60-119 seconds");
-            Console.WriteLine("5 = >2 minutes");
-            Console.WriteLine("");
-            int exercise1Score = Convert.ToInt32(Console.ReadLine());
+            foreach (string result in exerciseTemplate.ResultOptions)
+            {
+                Console.WriteLine(result);
+            }
+            // hier zit nog geen invoer validatie
+            Exercise newExercise = new Exercise(exerciseTemplate.ExerciseNumber, exerciseTemplate.Name, Convert.ToInt32(Console.ReadLine()));
+            newAssessment.AddExercise(newExercise);
             Console.SetCursorPosition(0, Console.CursorTop - 1);
             ClearCurrentConsoleLine();
-            Console.WriteLine($"Score entered {exercise1Score}");
-            Console.WriteLine("");
-            Console.WriteLine("----------------");
-            Console.WriteLine("");
-
-            Console.WriteLine("Exercise 2: Leg raise");
-            Console.WriteLine("");
-            Console.WriteLine("0 = unable to lift leg off table");
-            Console.WriteLine("1 = able to clear table but cannot touch object");
-            Console.WriteLine("2 = able to lift leg high enough to touch object");
-            Console.WriteLine("");
-            int exercise2Score = Convert.ToInt32(Console.ReadLine());
-            Console.SetCursorPosition(0, Console.CursorTop - 1);
-            ClearCurrentConsoleLine();
-            Console.WriteLine($"Score entered {exercise2Score}");
-            Console.WriteLine("");
-            Console.WriteLine("----------------");
-            Console.WriteLine("");
-
-            Console.WriteLine("Exercise 3: Straight leg lift");
-            Console.WriteLine("");
-            Console.WriteLine("0 = unable");
-            Console.WriteLine("1 = 1-9 seconds");
-            Console.WriteLine("2 = 10-29 seconds");
-            Console.WriteLine("3 = 30-59 seconds");
-            Console.WriteLine("4 = 60-119 seconds");
-            Console.WriteLine("5 = >2 minutes");
-            Console.WriteLine("");
-            int exercise3Score = Convert.ToInt32(Console.ReadLine());
-            Console.SetCursorPosition(0, Console.CursorTop - 1);
-            ClearCurrentConsoleLine();
-            Console.WriteLine($"Score entered {exercise3Score}");
-            Console.WriteLine("");
-            Console.WriteLine("----------------");
-            Console.WriteLine("");
-
-            PatientMenu();
         }
+        // die assessment moet nog toegevoegd worden aan de patient
+
+
+        PatientMenu();
+
+    }
 
         public static void PatientViewProgression()
         {
@@ -176,17 +226,147 @@ namespace JDM_Casus_Blok4.Classes
 
             int choice = DisplayMenuOptions(options, "press '0' to go back to the main menu", false);
 
-            switch (choice)
+        switch (choice)
+        {
+            case 0:
+                PatientMenu();
+                break;
+            case 1:
+                break;
+            case 2:
+                break;
+        }
+    }
+
+    public static void ParentMenu(Parent parent)
+    {
+        List<string> patientOptions = new List<string>();
+        foreach (Patient patient in parent.Patients)
+        {
+            patientOptions.Add($"{patient.UserName}");
+        }
+        int Patientchoice = DisplayMenuOptions(patientOptions, "Select patient to view.") - 1;
+        Patient patientToView = parent.Patients[Patientchoice];
+
+            List<string> options = new List<string>
+        {
+            "View progression",
+            "View assessment",
+            "Enter Assesmet",
+        };
+
+        int choice = DisplayMenuOptions(options, "Parent menu - press '0' to choose another login");
+        
+
+        switch (choice)
+        {
+            case 0:
+                MainMenu();
+                break;
+            case 1:
+                //ViewProgression();
+                break;
+            case 2:
+                ViewAssessment(patientToView, parent);
+                break;
+            case 3:
+                //EnterAssessment();
+                break;
+        }
+    }
+
+    public static void DoctorMenu(Doctor docter)
+    {
+        List<string> patientOptions = new List<string>();
+
+        foreach (Patient patient in testPatients)
+        {
+            patientOptions.Add($"{patient.UserName}");
+
+        }
+        int patientId = DisplayMenuOptions(patientOptions, "Select patient ID to view.") - 1;
+
+        Patient newPatient = testPatients.Find(x => x.Id == patientId);
+
+        List<string> options = new List<string>{
+            "View Progression(werkt niet)",
+            "View Assessment"
+        };
+
+        int choice = DisplayMenuOptions(options, "Select patient ID to view. - Press 0 to return to main menu");
+
+        switch (choice)
+        {
+            case 0:
+                MainMenu();
+                break;
+            case 1:
+                //PatientViewProgression(newPatient);
+                break;
+            case 2:
+                ViewAssessment(newPatient, docter);
+                break;
+            case 3:
+                //ChooseFrequency(newPatient);
+                break;
+
+        }
+
+
+
+    }
+
+    public static void ViewAssessment(Patient patient, User user)
+    {
+        Console.WriteLine($"View assessment placeholder: {patient.UserName}");
+        List<string> assessmentOptions = new List<string>();
+        Console.WriteLine("");
+        Console.WriteLine("Assessments:");
+        foreach (Assessment assessmentOption in patient.Assessments)
+        {
+            assessmentOptions.Add($"{assessmentOption.Date}");
+        }
+        Assessment assessmentToView = patient.Assessments[DisplayMenuOptions(assessmentOptions, "Select assessment to view.") - 1];
+        Console.Clear();
+        assessmentToView.VieuwAssessment();
+
+        Console.WriteLine("");
+        Console.WriteLine("1. Go back");
+        Console.WriteLine("2. Main menu");
+        if (assessmentToView.Validated == false)
+        {
+            Console.WriteLine("3. Validate assessment");
+        }
+        bool validInput = false;
+        while (!validInput)
+        {
+            try
             {
-                case 0:
-                    PatientMenu();
-                    break;
-                case 1:
-                    break;
-                case 2:
-                    break;
+                int choice = Convert.ToInt32(Console.ReadLine());
+                switch (choice)
+                {
+                    case 1:
+                        validInput = true;
+                        break;
+                    case 2:
+                        MainMenu();
+                        validInput = true;
+                        break;
+                    case 3:
+                        assessmentToView.MakeValidated(user);
+                        break;
+                    default:
+                        validInput = true;
+                        Console.WriteLine("Invalid choice. Please try again.");
+                        break;
+                }
+            }
+            catch
+            {
+                Console.WriteLine("Invalid choice. Please try again.");
             }
         }
+    }
 
         public static void ResearcherMenu()
         {
