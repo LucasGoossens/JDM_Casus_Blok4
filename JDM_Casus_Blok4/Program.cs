@@ -1,6 +1,9 @@
 ﻿
 using JDM_Casus_Blok4.Classes;
+using JDM_Casus_Blok4.UserClasses;
 using System.Data;
+using System.Diagnostics.Metrics;
+using System.Security.Cryptography.X509Certificates;
 
 internal class Program
 {
@@ -19,7 +22,7 @@ internal class Program
                 Exercise testExercise = new Exercise(i + j, "test", 80, 100);
                 testExerciseList.Add(testExercise);
             }
-            DateTime testDate = DateTime.Now;
+            DateOnly testDate = DateOnly.FromDateTime(DateTime.Now);
 
             Assessment testAssessment = new Assessment(i, testExerciseList, testDate, false, 100);
             Patient newPatient = new Patient(i, $"testname{i}", "testmail", "testpassword");
@@ -59,10 +62,11 @@ internal class Program
                 PatientMenu();
                 break;
             case 2:
-                //ParentMenu();
+                Parent parent = Parent.GetParent();
+                ParentMenu(parent);
                 break;
             case 3:
-                DoctorMenu();
+                DoctorMenu(testDoctor);
                 break;
             case 4:
             //PhysicalTherapistMenu();
@@ -210,7 +214,44 @@ internal class Program
         }
     }
 
-    public static void DoctorMenu()
+    public static void ParentMenu(Parent parent)
+    {
+        List<string> patientOptions = new List<string>();
+        foreach (Patient patient in parent.Patients)
+        {
+            patientOptions.Add($"{patient.UserName}");
+        }
+        int Patientchoice = DisplayMenuOptions(patientOptions, "Select patient to view.") - 1;
+        Patient patientToView = parent.Patients[Patientchoice];
+
+            List<string> options = new List<string>
+        {
+            "View progression",
+            "View assessment",
+            "Enter Assesmet",
+        };
+
+        int choice = DisplayMenuOptions(options, "Parent menu - press '0' to choose another login");
+        
+
+        switch (choice)
+        {
+            case 0:
+                MainMenu();
+                break;
+            case 1:
+                //ViewProgression();
+                break;
+            case 2:
+                ViewAssessment(patientToView, parent);
+                break;
+            case 3:
+                //EnterAssessment();
+                break;
+        }
+    }
+
+    public static void DoctorMenu(Doctor docter)
     {
         List<string> patientOptions = new List<string>();
 
@@ -239,7 +280,7 @@ internal class Program
                 //PatientViewProgression(newPatient);
                 break;
             case 2:
-                ViewAssessment(newPatient);
+                ViewAssessment(newPatient, docter);
                 break;
             case 3:
                 //ChooseFrequency(newPatient);
@@ -251,9 +292,56 @@ internal class Program
 
     }
 
-    public static void ViewAssessment(Patient patient)
+    public static void ViewAssessment(Patient patient, User user)
     {
         Console.WriteLine($"View assessment placeholder: {patient.UserName}");
+        List<string> assessmentOptions = new List<string>();
+        Console.WriteLine("");
+        Console.WriteLine("Assessments:");
+        foreach (Assessment assessmentOption in patient.Assessments)
+        {
+            assessmentOptions.Add($"{assessmentOption.Date}");
+        }
+        Assessment assessmentToView = patient.Assessments[DisplayMenuOptions(assessmentOptions, "Select assessment to view.") - 1];
+        Console.Clear();
+        assessmentToView.VieuwAssessment();
+
+        Console.WriteLine("");
+        Console.WriteLine("1. Go back");
+        Console.WriteLine("2. Main menu");
+        if (assessmentToView.Validated == false)
+        {
+            Console.WriteLine("3. Validate assessment");
+        }
+        bool validInput = false;
+        while (!validInput)
+        {
+            try
+            {
+                int choice = Convert.ToInt32(Console.ReadLine());
+                switch (choice)
+                {
+                    case 1:
+                        validInput = true;
+                        break;
+                    case 2:
+                        MainMenu();
+                        validInput = true;
+                        break;
+                    case 3:
+                        assessmentToView.MakeValidated(user);
+                        break;
+                    default:
+                        validInput = true;
+                        Console.WriteLine("Invalid choice. Please try again.");
+                        break;
+                }
+            }
+            catch
+            {
+                Console.WriteLine("Invalid choice. Please try again.");
+            }
+        }
     }
 
     public static void ClearCurrentConsoleLine()
