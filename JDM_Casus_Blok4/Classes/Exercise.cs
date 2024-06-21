@@ -15,6 +15,7 @@ namespace JDM_Casus_Blok4.Classes
         public string Name { get; set; }
         public int Score { get; set; }
         public int MaxScore { get; set; }
+        public Feedback Feedback { get; set; }
 
         public List<string> ResultOptions { get; set; }
         public Exercise()
@@ -52,5 +53,13 @@ namespace JDM_Casus_Blok4.Classes
             Name = name;
             Score = score;
         }
+        public void ViewExercise()
+        {
+            Console.WriteLine($"Exercise number: {ExerciseNumber}");
+            Console.WriteLine($"Name: {Name}");
+            Console.WriteLine($"Score: {Score}");
+            Console.WriteLine($"Max score: {MaxScore}");
+            Console.WriteLine($"Feedback: {Feedback.Message}");
+        }   
     }
 }
