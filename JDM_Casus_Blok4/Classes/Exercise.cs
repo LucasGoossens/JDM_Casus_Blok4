@@ -33,5 +33,13 @@ namespace JDM_Casus_Blok4.Classes
             Score = score;
             MaxScore = maxScore;
         }
+        public void ViewExercise()
+        {
+            Console.WriteLine($"Exercise number: {ExerciseNumber}");
+            Console.WriteLine($"Name: {Name}");
+            Console.WriteLine($"Score: {Score}");
+            Console.WriteLine($"Max score: {MaxScore}");
+            Console.WriteLine($"Feedback: {Feedback.Message}");
+        }   
     }
 }
