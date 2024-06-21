@@ -10,6 +10,8 @@ using JDM_Casus_Blok4.UserClasses;
 using System.Data;
 using System.Diagnostics.Metrics;
 using System.Security.Cryptography.X509Certificates;
+using System.ComponentModel;
+using static System.Formats.Asn1.AsnWriter;
 
 internal class Program
 {
@@ -263,7 +265,7 @@ internal class Program
                 MainMenu();
                 break;
             case 1:
-                //ViewProgression();
+                ViewProgression(patientToView, parent);
                 break;
             case 2:
                 ViewAssessment(patientToView, parent);
@@ -425,5 +427,30 @@ internal class Program
             Console.WriteLine("Invalid choice. Please try again.");
             return DisplayMenuOptions(options, title, clearConsole);
         }
+    }
+    public static void ViewProgression(Patient patientToVieuw, User user)
+    {
+        List<int> progression = new List<int>();
+        string progressionString = "";
+        foreach (Assessment assessment in patientToVieuw.Assessments)
+        {
+            if (assessment.Validated)
+            {
+                progressionString += $"{assessment.TotalScore} + ";
+            }
+        }
+        Console.WriteLine("Progression of assessment scores:");
+
+        string progressionStringToShow = progressionString.Substring(0, progressionString.Length - 3);
+        Console.WriteLine(progressionStringToShow);
+        Console.WriteLine("press enter to continue");
+        Console.ReadLine();
+        Console.Clear();
+        if (user is Parent parent)
+        {
+            ParentMenu(parent);
+        }
+
+
     }
 }
