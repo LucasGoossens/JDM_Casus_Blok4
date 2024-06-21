@@ -23,8 +23,7 @@ internal class Program
         for (int i = 0; i < 3; i++)
         {
 
-
-            DateTime testDate = DateTime.Now;
+            DateOnly testDate = DateOnly.FromDateTime(DateTime.Now);
 
             Assessment testAssessment = new Assessment(i, CMAS, testDate, false, 100);
             Patient newPatient = new Patient(i, $"testname{i}", "testmail", "testpassword");
