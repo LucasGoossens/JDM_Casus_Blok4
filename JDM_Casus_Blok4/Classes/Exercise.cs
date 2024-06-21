@@ -15,6 +15,7 @@ namespace JDM_Casus_Blok4.Classes
         public string Name { get; set; }
         public int Score { get; set; }
         public int MaxScore { get; set; }
+        public Feedback Feedback { get; set; }
 
 
         public Exercise(int id, int exerciseNumber, string name, int score, int maxScore)

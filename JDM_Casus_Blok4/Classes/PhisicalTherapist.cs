@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace JDM_Casus_Blok4.Classes
 {
-    public class PhisicalTherapist : User
+    public class PhisicalTherapist : User, Interfaces.IProvider
     {
         public List<Patient> Patients { get; set; }
 
