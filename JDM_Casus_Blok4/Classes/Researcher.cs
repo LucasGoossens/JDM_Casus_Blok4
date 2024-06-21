@@ -13,26 +13,15 @@ namespace JDM_Casus_Blok4.Classes
 {
     public class Researcher : User
     {
-        public List<Patient> AllPatient { get; set; }
+        public List<Assessment> AllAssessments { get; set; }
 
         public Researcher() : base()
         {
-            AllPatient = new List<Patient>();
+            AllAssessments = Assessment.GetAllAssessments();
         }
 
-        public void ViewAssessments()
-        {
-            Console.Clear();
-            Console.WriteLine("Assessments:");
-            foreach (Patient patient in AllPatient)
-            {
-                Console.WriteLine($"Patient: {patient.UserName}");
-                foreach (var assessment in patient.Assessments)
-                {
-                    Console.WriteLine($"- {assessment}");
-                }
-            }
-            Console.WriteLine("");
-        }
+        
+
+
     }
 }
