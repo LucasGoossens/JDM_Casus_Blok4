@@ -20,6 +20,9 @@ namespace JDM_Casus_Blok4.Classes
         public Feedback Feedback { get; set; }
 
         // from database
+        
+        public Assessment() { }
+        
         public Assessment(int id, List<Exercise> exercises, DateOnly date, bool validated, int totalScore)
         {
             Id = id;
