@@ -13,6 +13,9 @@ namespace JDM_Casus_Blok4.Classes
         public DateTime Date { get; set; }
         public bool Validated { get; set; }
         public int? TotalScore { get; set; }
+        public int ValidatorId { get; set; }
+        public int PatientAge { get; set; }
+        public Feedback Feedback { get; set; }
 
         // from database
         public Assessment(int id, List<Exercise> exercises, DateTime date, bool validated, int totalScore)
