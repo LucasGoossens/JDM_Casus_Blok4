@@ -276,7 +276,7 @@ internal class Program
         }
     }
 
-    public static void DoctorMenu(Doctor docter)
+    public static void DoctorMenu(Doctor doctor)
     {
         List<string> patientOptions = new List<string>();
 
@@ -290,11 +290,11 @@ internal class Program
         Patient newPatient = testPatients.Find(x => x.Id == patientId);
 
         List<string> options = new List<string>{
-            "View Progression(werkt niet)",
+            "View Progression",
             "View Assessment"
         };
 
-        int choice = DisplayMenuOptions(options, "Select patient ID to view. - Press 0 to return to main menu");
+        int choice = DisplayMenuOptions(options, "Doctor menu. - Press 0 to return to main menu");
 
         switch (choice)
         {
@@ -302,10 +302,10 @@ internal class Program
                 MainMenu();
                 break;
             case 1:
-                //PatientViewProgression(newPatient);
+                ViewProgression(newPatient, doctor);
                 break;
             case 2:
-                ViewAssessment(newPatient, docter);
+                ViewAssessment(newPatient, doctor);
                 break;
             case 3:
                 //ChooseFrequency(newPatient);
@@ -439,9 +439,10 @@ internal class Program
                 progressionString += $"{assessment.TotalScore} + ";
             }
         }
-        Console.WriteLine("Progression of assessment scores:");
+        Console.WriteLine("Progression of assessment scores:");        
 
-        string progressionStringToShow = progressionString.Substring(0, progressionString.Length - 3);
+        // checkt of er assessments zijn
+        string progressionStringToShow = progressionString.Length < 3 ? "No assessments available" : progressionString.Substring(0, progressionString.Length - 3);
         Console.WriteLine(progressionStringToShow);
         Console.WriteLine("press enter to continue");
         Console.ReadLine();
@@ -449,6 +450,9 @@ internal class Program
         if (user is Parent parent)
         {
             ParentMenu(parent);
+        }else if(user is Doctor doctor)
+        {
+           DoctorMenu(doctor);
         }
 
 
