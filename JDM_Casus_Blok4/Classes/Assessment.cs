@@ -16,6 +16,7 @@ namespace JDM_Casus_Blok4.Classes
         public int? TotalScore { get; set; }
         public int ValidatorId { get; set; }
         public int PatientAge { get; set; }
+        public int PatientId { get; set; }
         public Feedback Feedback { get; set; }
 
         // from database
@@ -70,5 +71,11 @@ namespace JDM_Casus_Blok4.Classes
             }
         }
 
+        public static List<Assessment> GetAllAssessments()
+        {
+            List<Assessment> assessments = new List<Assessment>();
+            // get assessments from database
+            return assessments;
+        }
     }
 }
