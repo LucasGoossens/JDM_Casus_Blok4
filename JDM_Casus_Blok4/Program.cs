@@ -155,8 +155,24 @@ internal class Program
             Console.SetCursorPosition(0, Console.CursorTop - 1);
             ClearCurrentConsoleLine();
         }
+
+        newAssessment.Date = DateOnly.FromDateTime(DateTime.Now);        
+        newAssessment.CalculatingScore();
+
+
+        // alle placeholder data
         // dummy patient
-        testPatients[0].Assessments.Add(newAssessment);
+        testPatients[1].Assessments.Add(newAssessment);        
+        // dit werkt niet:
+        // newAssessment.PatientAge = testPatients[1].DateOfBirth >> int <!> DateOnly
+        // Patient.Age maken?
+        // of kunt misschien alleen het jaar van DateOnly gebruiken en naar int casten, kijk dinsdag
+        // newAssement.PatientAge = patient.Age; 
+
+        newAssessment.PatientId = testPatients[1].Id;
+        newAssessment.PatientAge = 999;
+        
+        newAssessment.SaveAssessment(); 
 
         PatientMenu();
 

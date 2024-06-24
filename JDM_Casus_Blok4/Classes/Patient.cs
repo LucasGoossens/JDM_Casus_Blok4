@@ -9,7 +9,7 @@ namespace JDM_Casus_Blok4.Classes
 {
     public class Patient : User
     {
-        DateOnly DateOfBirth { get; set; }
+        public DateOnly DateOfBirth { get; set; }
         public int AssessmentFrequentie { get; set; }
         public List<Assessment> Assessments = new List<Assessment>();
         public Patient(int id, string firstName, string lastName, string password) : base(id, firstName, lastName, password)
