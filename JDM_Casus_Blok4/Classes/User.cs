@@ -5,31 +5,31 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace JDM_Casus_Blok4.UserClasses
-{ 
+{
     public abstract class User
     {
-        public int Id{ get; set; }
-        public string UserName { get; set; }
-        public string Email { get; set; }
+        public int Id { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
         public string Password { get; set; }
 
         // lege constructor zodat 'base:()' werkt voor nu
         protected User()
         {
-            
+
         }
-        public User(string userName, string email, string password)
-        {         
-            UserName = userName;
-            Email = email;
+        public User(string firstName, string lastName, string password)
+        {
+            FirstName = firstName;
+            LastName = lastName;
             Password = password;
         }
 
-        public User(int id, string userName, string email, string password)
+        public User(int id, string firstName, string lastName, string password)
         {
             Id = id;
-            UserName = userName;
-            Email = email;
+            FirstName = firstName;
+            LastName = lastName;
             Password = password;
         }
     }

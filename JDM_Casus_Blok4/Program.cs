@@ -256,7 +256,7 @@ internal class Program
         List<string> patientOptions = new List<string>();
         foreach (Patient patient in parent.Patients)
         {
-            patientOptions.Add($"{patient.UserName}");
+            patientOptions.Add($"{patient.FirstName}");
         }
         int Patientchoice = DisplayMenuOptions(patientOptions, "Select patient to view.") - 1;
         Patient patientToView = parent.Patients[Patientchoice];
@@ -294,7 +294,7 @@ internal class Program
 
         foreach (Patient patient in testPatients)
         {
-            patientOptions.Add($"{patient.UserName}");
+            patientOptions.Add($"{patient.FirstName}");
 
         }
         int patientId = DisplayMenuOptions(patientOptions, "Select patient ID to view.") - 1;
@@ -332,7 +332,7 @@ internal class Program
 
     public static void ViewAssessment(Patient patient, User user)
     {
-        Console.WriteLine($"View assessment placeholder: {patient.UserName}");
+        Console.WriteLine($"View assessment placeholder: {patient.FirstName}");
         List<string> assessmentOptions = new List<string>();
         Console.WriteLine("");
         Console.WriteLine("Assessments:");
