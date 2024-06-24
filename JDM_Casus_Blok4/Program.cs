@@ -22,17 +22,17 @@ internal class Program
         new Exercise(1, "Head elevation", new List<string> { "0 = unable", "1 = 1-9 seconds", "2 = 10-29 seconds", "3 = 30-59 seconds", "4 = 60-119 seconds", "5 = >2 minutes" }),
         new Exercise(2, "Leg raise/touch object", new List<string> { "0 = unable to lift leg off table", "1 = able to clear table but cannot touch object", "2 = able to lift leg high enough to touch object" }),
         new Exercise(3, "Straight leg lift", new List<string> { "0 = unable", "1 = 1-9 seconds", "2 = 10-29 seconds", "3 = 30-59 seconds", "4 = 60-119 seconds", "5 = >2 minutes" }),
-        //new Exercise(4, "Supine to prone", new List<string> { "0 = unable", "1 = turns onto side fairly easily; but cannot fully free arms and is not able to fully assume a prone position", "2 = easily turns onto side; has some difficulty freeing arms, but fully frees them and fully assumes a prone position", "3 = easily turns over, free arms with no difficulty" }),
-        //new Exercise(5, "Sit ups", new List<string> { "0 = unable", "1 = able", "Sub Score = (maximum possible item score 6)" }),
-        //new Exercise(6, "Supine to sit", new List<string> { "0 = unable", "1 = much difficulty. Very slow, struggles greatly, barely makes it. Almost unable", "2 = some difficulty. Able, but is somewhat slow, struggles some.", "3 = no difficulty" }),
-        //new Exercise(7, "Arm raise/straighten", new List<string> { "0 = cannot raise wrists", "1 = can raise wrists at least up to the level of the acromioclavicular joint but not above top of head", "2 = can raise wrists above top of head but cannot raise arms straight above head so that elbows are in full extension", "3 = can raise arms straight above head so that elbows are in full extension" }),
-        //new Exercise(8, "Arm raise/duration", new List<string> { "0 = unable", "1 = 1-9 seconds", "2 = 10-29 seconds", "3 = 30-59 seconds", "4 = >60 seconds" }),
-        //new Exercise(9, "Floor sit", new List<string> { "0 = unable. Afraid to even try. Even if allowed to use a chair for support. Child fears that he/she will collapse, fall into a sit or self-harm", "1 = much difficulty. Able, but needs to hold onto chair for support during descent (unable or unwilling to try if not able to use a chair for support)", "2 = some difficulty. Can go from stand to sit without using a chair for support but has at least some difficulty during descent. Descends somewhat slowly and/or apprehensively; may not have full control or balance as manoeuvres into a sit", "3 = no difficulty. Requires no compensatory manoeuvring" }),
-        //new Exercise(10, "All-fours manoeuvre", new List<string> { "0 = unable to go from a prone to an all-fours position", "1 = barely able to assume and maintain an all-fours position", "2 = can maintain all-fours position with straight back and head raised (so as to look straight ahead). But cannot crawl forward", "3 = can maintain all fours, look straight ahead and crawl forward", "4 = maintains balance while lifting and extending leg" }),
-        //new Exercise(11, "Floor rise", new List<string> { "0 = unable, even if allowed to use a chair for support", "1 = much difficulty. Able, but needs to use a chair for support. Unable if not allowed to use a chair", "2 = moderate difficulty. Able to get up without a chair for support but needs to place on or both hands on thighs/knees or floor. Unable without using hands.", "3 = mild difficulty. Does not need to place hands on knees, thighs or floor but has at least some difficulty during ascent.", "4 = no difficulty" }),
-        //new Exercise(12, "Chair rises", new List<string> { "0 = unable to rise from chair, even if allowed to place hands on sides of chair", "1 = much difficulty. Able but needs to place hands on side of seat. Unable if not allowed to place hands on knees/thighs", "2 = moderate difficulty. Able but needs to place hands on knees/thighs. Does not need to place hands on side of seat", "3 = mild difficulty. Able; does not need to use hands at all, but has at least some difficulty", "4 = no difficulty" }),
-        //new Exercise(13, "Stool step", new List<string> { "0 = unable", "1 = much difficulty. Able but needs to place one hand on exam table or examiner’s hand", "2 = some difficulty. Able; does not need to use exam table for support but needs to use hands on knee/thigh", "3 = able. Does not need to use exam table or hands on knee/thigh" }),
-        //new Exercise(14, "Pick up", new List<string> { "0 = able to bend over and pick up pencil on floor", "1 = much difficulty. Able but relies heavily on support gained by placing hands on knees/thighs", "2 = some difficulty. Needs to at least minimally and briefly place hands on knees/thighs for support and is somewhat slow", "3 = No difficulty. No compensatory manoeuvre necessary." })
+        new Exercise(4, "Supine to prone", new List<string> { "0 = unable", "1 = turns onto side fairly easily; but cannot fully free arms and is not able to fully assume a prone position", "2 = easily turns onto side; has some difficulty freeing arms, but fully frees them and fully assumes a prone position", "3 = easily turns over, free arms with no difficulty" }),
+        new Exercise(5, "Sit ups \n\nFor each type of sit-up give “0” (unable) or “1” (able).\r\nThen enter the total sub score (maximum possible item score 6). \n a) Hands on thighs, with counterbalance -\n b) Hands across chest, with counterbalance -\n c) Hands behind head, with counterbalance -\n d) Hands on thighs, without counterbalance -\n e) Hands across chest, without counterbalance -\n f) Hands behind head, without counterbalance -", new List<string> {"Enter Sub Score = (maximum possible item score 6)", "", "", "", "", "", "" }),
+        new Exercise(6, "Supine to sit", new List<string> { "0 = unable", "1 = much difficulty. Very slow, struggles greatly, barely makes it. Almost unable", "2 = some difficulty. Able, but is somewhat slow, struggles some.", "3 = no difficulty" }),
+        new Exercise(7, "Arm raise/straighten", new List<string> { "0 = cannot raise wrists", "1 = can raise wrists at least up to the level of the acromioclavicular joint but not above top of head", "2 = can raise wrists above top of head but cannot raise arms straight above head so that elbows are in full extension", "3 = can raise arms straight above head so that elbows are in full extension" }),
+        new Exercise(8, "Arm raise/duration", new List<string> { "0 = unable", "1 = 1-9 seconds", "2 = 10-29 seconds", "3 = 30-59 seconds", "4 = >60 seconds" }),
+        new Exercise(9, "Floor sit", new List<string> { "0 = unable. Afraid to even try. Even if allowed to use a chair for support. Child fears that he/she will collapse, fall into a sit or self-harm", "1 = much difficulty. Able, but needs to hold onto chair for support during descent (unable or unwilling to try if not able to use a chair for support)", "2 = some difficulty. Can go from stand to sit without using a chair for support but has at least some difficulty during descent. Descends somewhat slowly and/or apprehensively; may not have full control or balance as manoeuvres into a sit", "3 = no difficulty. Requires no compensatory manoeuvring" }),
+        new Exercise(10, "All-fours manoeuvre", new List<string> { "0 = unable to go from a prone to an all-fours position", "1 = barely able to assume and maintain an all-fours position", "2 = can maintain all-fours position with straight back and head raised (so as to look straight ahead). But cannot crawl forward", "3 = can maintain all fours, look straight ahead and crawl forward", "4 = maintains balance while lifting and extending leg" }),
+        new Exercise(11, "Floor rise", new List<string> { "0 = unable, even if allowed to use a chair for support", "1 = much difficulty. Able, but needs to use a chair for support. Unable if not allowed to use a chair", "2 = moderate difficulty. Able to get up without a chair for support but needs to place on or both hands on thighs/knees or floor. Unable without using hands.", "3 = mild difficulty. Does not need to place hands on knees, thighs or floor but has at least some difficulty during ascent.", "4 = no difficulty" }),
+        new Exercise(12, "Chair rises", new List<string> { "0 = unable to rise from chair, even if allowed to place hands on sides of chair", "1 = much difficulty. Able but needs to place hands on side of seat. Unable if not allowed to place hands on knees/thighs", "2 = moderate difficulty. Able but needs to place hands on knees/thighs. Does not need to place hands on side of seat", "3 = mild difficulty. Able; does not need to use hands at all, but has at least some difficulty", "4 = no difficulty" }),
+        new Exercise(13, "Stool step", new List<string> { "0 = unable", "1 = much difficulty. Able but needs to place one hand on exam table or examiner’s hand", "2 = some difficulty. Able; does not need to use exam table for support but needs to use hands on knee/thigh", "3 = able. Does not need to use exam table or hands on knee/thigh" }),
+        new Exercise(14, "Pick up", new List<string> { "0 = able to bend over and pick up pencil on floor", "1 = much difficulty. Able but relies heavily on support gained by placing hands on knees/thighs", "2 = some difficulty. Needs to at least minimally and briefly place hands on knees/thighs for support and is somewhat slow", "3 = No difficulty. No compensatory manoeuvre necessary." })
 
     };
     static void Main(string[] args)
@@ -118,78 +118,45 @@ internal class Program
     }
 
     public static void EnterAssessment()
-    {
-        //Console.Clear();
-        //Console.WriteLine("Exercise 1: Head elevation");
-        //Console.WriteLine("");
-        //Console.WriteLine("0 = unable");
-        //Console.WriteLine("1 = 1-9 seconds");
-        //Console.WriteLine("2 = 10-29 seconds");
-        //Console.WriteLine("3 = 30-59 seconds");
-        //Console.WriteLine("4 = 60-119 seconds");
-        //Console.WriteLine("5 = >2 minutes");
-        //Console.WriteLine("");
-        //int exercise1Score = Convert.ToInt32(Console.ReadLine());
-        //Console.SetCursorPosition(0, Console.CursorTop - 1);
-        //ClearCurrentConsoleLine();
-        //Console.WriteLine($"Score entered {exercise1Score}");
-        //Console.WriteLine("");
-        //Console.WriteLine("----------------");
-        //Console.WriteLine("");
-
-        //Console.WriteLine("Exercise 2: Leg raise");
-        //Console.WriteLine("");
-        //Console.WriteLine("0 = unable to lift leg off table");
-        //Console.WriteLine("1 = able to clear table but cannot touch object");
-        //Console.WriteLine("2 = able to lift leg high enough to touch object");
-        //Console.WriteLine("");
-        //int exercise2Score = Convert.ToInt32(Console.ReadLine());
-        //Console.SetCursorPosition(0, Console.CursorTop - 1);
-        //ClearCurrentConsoleLine();
-        //Console.WriteLine($"Score entered {exercise2Score}");
-        //Console.WriteLine("");
-        //Console.WriteLine("----------------");
-        //Console.WriteLine("");
-
-
-        //Console.WriteLine("Exercise 3: Straight leg lift");
-        //Console.WriteLine("");
-        //Console.WriteLine("0 = unable");
-        //Console.WriteLine("1 = 1-9 seconds");
-        //Console.WriteLine("2 = 10-29 seconds");
-        //Console.WriteLine("3 = 30-59 seconds");
-        //Console.WriteLine("4 = 60-119 seconds");
-        //Console.WriteLine("5 = >2 minutes");
-        //Console.WriteLine("");
-        //int exercise3Score = Convert.ToInt32(Console.ReadLine());
-        //Console.SetCursorPosition(0, Console.CursorTop - 1);
-        //ClearCurrentConsoleLine();
-        //Console.WriteLine($"Score entered {exercise3Score}");
-        //Console.WriteLine("");
-        //Console.WriteLine("----------------");
-        //Console.WriteLine("");         
-
-
-
-
+    {       
         Assessment newAssessment = new Assessment(false);
 
         foreach (Exercise exerciseTemplate in CMAS)
         {
+            Console.Clear();
             Console.WriteLine($"Exercise {exerciseTemplate.ExerciseNumber}: {exerciseTemplate.Name}");
             Console.WriteLine("");
+            
             foreach (string result in exerciseTemplate.ResultOptions)
             {
+                if(result == "") { break; }
+                // edge case voor Situps, 
+                // de hoogste te behalen score van alle andere exercises komt overeen met exerciseTemplate.ResultOptions.Count() - 1,
+                // maar Situps heeft subscores,in totaal maximaal 6, dus er zitten lege 6 strings in de list van situps                
+
                 Console.WriteLine(result);
             }
+
+            Console.WriteLine("");
+            int exerciseAssessmentScore = 0;
+            do
+            {
+                if(exerciseAssessmentScore > exerciseTemplate.ResultOptions.Count() -1 || exerciseAssessmentScore < 0)
+                {
+                    Console.WriteLine("Invalid choice. Please try again.");
+                }
+                Console.WriteLine("Enter your score.");
+                exerciseAssessmentScore = Convert.ToInt32(Console.ReadLine());
+            } while (exerciseAssessmentScore > exerciseTemplate.ResultOptions.Count() - 1 || exerciseAssessmentScore < 0);
+
             // hier zit nog geen invoer validatie
-            Exercise newExercise = new Exercise(exerciseTemplate.ExerciseNumber, exerciseTemplate.Name, Convert.ToInt32(Console.ReadLine()));
+            Exercise newExercise = new Exercise(exerciseTemplate.ExerciseNumber, exerciseTemplate.Name, exerciseAssessmentScore);
             newAssessment.AddExercise(newExercise);
             Console.SetCursorPosition(0, Console.CursorTop - 1);
             ClearCurrentConsoleLine();
         }
-        // die assessment moet nog toegevoegd worden aan de patient
-
+        // dummy patient
+        testPatients[0].Assessments.Add(newAssessment);
 
         PatientMenu();
 
@@ -342,7 +309,7 @@ internal class Program
         }
         Assessment assessmentToView = patient.Assessments[DisplayMenuOptions(assessmentOptions, "Select assessment to view.") - 1];
         Console.Clear();
-        assessmentToView.VieuwAssessment();
+        assessmentToView.ViewAssessment();
 
         Console.WriteLine("");
         Console.WriteLine("1. Go back");
@@ -368,7 +335,7 @@ internal class Program
                         break;
                     case 3:
                         if (assessmentToView.Validated == true) break; // "3. Validate assessment" wordt niet geprint, maar kunt zonder deze line nog steeds op 3 drukken
-                        assessmentToView.MakeValidated(user);
+                        assessmentToView.ValidateAssessment(user);
                         break;
                     default:
                         validInput = true;

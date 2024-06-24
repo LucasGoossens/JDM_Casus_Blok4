@@ -11,11 +11,7 @@ namespace JDM_Casus_Blok4.Classes
     {
         public List<Patient> Patients { get; set; }
 
-        public void ValidateAssessment()
-        {
-            Patients = new List<Patient>();
-        }
-
+       
         public void EnterAssessment()
         {
 
