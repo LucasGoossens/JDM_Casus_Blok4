@@ -11,7 +11,9 @@ namespace JDM_Casus_Blok4.DAL
     {
         private static readonly Dal _instance = new Dal();
         private Dal()
-        {}
+        {
+            
+        }
         public static Dal Instance
         {
             get
@@ -20,15 +22,11 @@ namespace JDM_Casus_Blok4.DAL
             }
         }
 
-        List<Assessment> assessments = new List<Assessment>();
-        List<Exercise> exercises = new List<Exercise>();
-        List<Feedback> feedbacks = new List<Feedback>();
-
         // Crud Create:
 
         public void CreateAssessment()
         {
-            
+            // Create a new assessment
         }
 
         public void CreateExercise()
