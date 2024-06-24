@@ -320,11 +320,11 @@ internal class Program
                 ViewAssessment(newPatient, doctor);
                 break;
             case 3:
-                //ChooseFrequency(newPatient);
+                ChooseFrequency(newPatient);
                 break;
-            //case 4:
-            //    ValidateAssessment(newPatient, doctor);
-            //    break;
+                //case 4:
+                //    ValidateAssessment(newPatient, doctor);
+                //    break;
 
         }
 
@@ -470,6 +470,26 @@ internal class Program
             DoctorMenu(doctor);
         }
 
+
+    }
+    public static void ChooseFrequency(Patient patient)
+    {
+        Console.WriteLine($"The current frequency between assessments {patient.AssessmentFrequentie} days:");
+        Console.WriteLine("Enter new frequency (in days):");
+        bool validInput = false;
+        while (!validInput)
+        {
+            try
+            {
+                int newFrequency = Convert.ToInt32(Console.ReadLine());
+                validInput = true;
+            }
+            catch
+            {
+                Console.WriteLine("Invalid input. Please try again.");
+                ChooseFrequency(patient);
+            }
+        }
 
     }
 }
