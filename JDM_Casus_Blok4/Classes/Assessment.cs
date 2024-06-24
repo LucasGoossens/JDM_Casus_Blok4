@@ -54,14 +54,14 @@ namespace JDM_Casus_Blok4.Classes
             }
 
         }
-        public void MakeValidated(User user)
+        public void ValidateAssessment(User user)
         {
             Validated = true;
             ValidatorId = user.Id;
             // add reference to database
         }
 
-        public void VieuwAssessment()
+        public void ViewAssessment()
         {
             Console.WriteLine($"Date: {Date}");
             Console.WriteLine($"Total score: {TotalScore}");
