@@ -1,4 +1,5 @@
-﻿using System;
+﻿using JDM_Casus_Blok4.Classes;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,6 +9,18 @@ namespace JDM_Casus_Blok4.DAL
 {
     public class Dal
     {
+        private static readonly Dal _instance = new Dal();
+        private Dal()
+        {
+            
+        }
+        public static Dal Instance
+        {
+            get
+            {
+                return _instance;
+            }
+        }
 
         // Crud Create:
 
@@ -80,7 +93,7 @@ namespace JDM_Casus_Blok4.DAL
             // Update an exercise
         }
 
-        public void updatePatient()
+        public void UpdatePatient(Patient patient)
         {
             // Update a patient
         }
