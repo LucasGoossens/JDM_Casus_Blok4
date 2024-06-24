@@ -11,10 +11,10 @@ namespace JDM_Casus_Blok4.Classes
     {
         public int Id { get; set; }
         public List<Exercise> Exercises { get; set; }
-        public DateOnly Date { get; set; }
+        public DateOnly Date { get; set; } // Dit werkt niet automatisch met SQL 'date'-data type, terug converten naar DateTime of  
         public bool Validated { get; set; }
         public int? TotalScore { get; set; }
-        public int ValidatorId { get; set; }
+        public int? ValidatorId { get; set; }
         public int PatientAge { get; set; }
         public int PatientId { get; set; }
         public Feedback Feedback { get; set; }
@@ -75,6 +75,12 @@ namespace JDM_Casus_Blok4.Classes
             {
                 exercise.ViewExercise();
             }
+        }
+
+        public void SaveAssessment()
+        {
+            DAL.Dal Dal = DAL.Dal.Instance;
+            Dal.CreateAssessment(this);
         }
 
         public static List<Assessment> GetAllAssessments()
