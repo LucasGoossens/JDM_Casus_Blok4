@@ -28,7 +28,7 @@ namespace JDM_Casus_Blok4.DAL
 
         public void CreateAssessment()
         {
-            // Create a new assessment
+            
         }
 
         public void CreateExercise()
@@ -95,7 +95,7 @@ namespace JDM_Casus_Blok4.DAL
             // Update an exercise
         }
 
-        public void updatePatient()
+        public void UpdatePatient(Patient patient)
         {
             // Update a patient
         }
