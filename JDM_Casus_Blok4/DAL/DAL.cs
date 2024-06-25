@@ -50,18 +50,18 @@ namespace JDM_Casus_Blok4.DAL
                             {
                                 System.Diagnostics.Debug.WriteLine(DateOnly.FromDateTime(reader.GetDateTime(1)));
 
+                                int assessmentId = (int)reader["Id"];
+                                DateOnly assessmentDate = DateOnly.FromDateTime((DateTime)reader["CompletionDate"]);
+                                int assessmentTotalScore = (int)reader["TotalScore"];
+                                bool assessmentValidated = (bool)reader["Validated"];
+                                int assessmentPatientAge = (int)reader["PatientAge"];
+                                int assessmentPatientId = (int)reader["PatientId"];
 
-                                Assessment assessment = new Assessment();
-                                assessment.Id = (int)reader["Id"];
-                                assessment.Date = DateOnly.FromDateTime((DateTime)reader["CompletionDate"]);
-                                assessment.TotalScore = (int)reader["TotalScore"];
-                                assessment.Validated = (bool)reader["Validated"];
-                                assessment.PatientAge = (int)reader["PatientAge"];
-                                assessment.PatientId = (int)reader["PatientId"];
+                                List<Exercise> assessmentExercises = GetExercisesByAssessmentId(assessmentId);
 
-                                assessment.Exercises = GetExercisesByAssessmentId(assessment.Id);
+                                Assessment newAssessment = new Assessment(assessmentId, assessmentExercises, assessmentDate, assessmentValidated, assessmentTotalScore, assessmentPatientAge, assessmentPatientId);
 
-                                assessments.Add(assessment);
+                                assessments.Add(newAssessment);
                             }
                         }
                     }
@@ -164,13 +164,13 @@ namespace JDM_Casus_Blok4.DAL
                         {
                             while (reader.Read())
                             {
-                                Exercise exercise = new Exercise();
-                                exercise.Id = (int)reader["Id"];
-                                exercise.ExerciseNumber = (int)reader["ExerciseNumber"];
-                                exercise.Name = (string)reader["Name"];
-                                exercise.Score = (int)reader["Score"];
-                                exercise.MaxScore = (int)reader["MaxScore"];
+                                int exerciseId = (int)reader["Id"];
+                                int exerciseExerciseNumber = (int)reader["ExerciseNumber"];
+                                string exerciseName = (string)reader["Name"];
+                                int exerciseScore = (int)reader["Score"];
+                                int exerciseMaxScore = (int)reader["MaxScore"];
 
+                                Exercise exercise = new Exercise(exerciseId, exerciseExerciseNumber, exerciseName, exerciseScore, exerciseMaxScore, new List<string>());
                                 exercises.Add(exercise);
                             }
                         }

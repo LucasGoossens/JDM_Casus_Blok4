@@ -28,7 +28,7 @@ namespace JDM_Casus_Blok4.Classes
             Assessments = Dal.GetAssessmentsById(Id);
         }
 
-        public void EditAssessmentFrequentie(int assessmentFrequentie)
+        public void EditAssessmentFrequentie(int assessmentFrequentie) { }
 
         //public Patient(int id, string firstname, string lastname, List<Assessment> assessments) : base(id, firstname, lastname)
         //{
