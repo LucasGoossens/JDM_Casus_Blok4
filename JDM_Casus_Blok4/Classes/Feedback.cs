@@ -20,8 +20,5 @@ namespace JDM_Casus_Blok4.Classes
             Provider = prodider;
         }
 
-
-
-        
     }
 }
