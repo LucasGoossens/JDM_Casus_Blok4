@@ -319,6 +319,9 @@ internal class Program
         List<string> assessmentOptions = new List<string>();
         Console.WriteLine("");
         Console.WriteLine("Assessments:");
+        
+        patient.GetAssessments();
+
         foreach (Assessment assessmentOption in patient.Assessments)
         {
             assessmentOptions.Add($"{assessmentOption.Date}");
