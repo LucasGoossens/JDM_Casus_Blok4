@@ -8,31 +8,13 @@ namespace JDM_Casus_Blok4.Classes
     public class Researcher : User
     {
         public List<Assessment> Assessments { get; private set; }
-
+        private Dal dal;
         public Researcher(int id, string firstname, string lastname) : base(id, firstname, lastname)
         {
-            InitializeDal();
-            InitializeAssessments();
         }
 
-        public Researcher(int id, string firstName, string lastName, string password)
-            : base(id, firstName, lastName, password)
-        {
-            InitializeDal();
-            InitializeAssessments();
-        }
 
-        private void InitializeDal()
-        {
-            dal = Dal.Instance;
-        }
-
-        private void InitializeAssessments()
-        {
-            Assessments = dal.GetAssessments();
-        }
-
-        public void CreateAssessment(Assessment assessment)
+        public void CreateAssessment(Assessment assessment) 
         {
             dal.CreateAssessment(assessment);
             Assessments.Add(assessment);  // Add to local list

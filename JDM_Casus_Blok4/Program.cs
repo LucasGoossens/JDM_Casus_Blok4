@@ -45,7 +45,7 @@ internal class Program
 
             DateOnly testDate = DateOnly.FromDateTime(DateTime.Now);
 
-            Assessment testAssessment = new Assessment(i, CMAS, testDate, false, 100);
+            Assessment testAssessment = new Assessment(i, CMAS, testDate, false, 100, 10,1);
             Patient newPatient = new Patient(i, $"testname{i}", "testmail", new DateOnly(), 2);
             testPatients.Add(newPatient);
             newPatient.Assessments.Add(testAssessment);

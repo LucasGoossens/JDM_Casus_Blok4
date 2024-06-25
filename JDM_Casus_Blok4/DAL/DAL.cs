@@ -1,18 +1,19 @@
 ﻿using JDM_Casus_Blok4.Classes;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace JDM_Casus_Blok4.DAL
 {
-    public sealed class Dal
+    public class Dal
     {
         private static readonly Dal _instance = new Dal();
         public string connStr = "Server=tcp:casus-blok-4.database.windows.net,1433;Initial Catalog=JDMDatabase;Persist Security Info=False;User ID=tacoadmin;Password=rN6yPGff856Dq#Fj;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";
-
 
         private Dal()
         {
@@ -22,10 +23,6 @@ namespace JDM_Casus_Blok4.DAL
         {
             get
             {
-                if (_instance == null)
-                {
-                    _instance = new Dal();
-                }
                 return _instance;
             }
         }
@@ -94,16 +91,17 @@ namespace JDM_Casus_Blok4.DAL
                         {
                             while (reader.Read())
                             {
-                                Assessment assessment = new Assessment
-                                {
-                                    Id = reader.GetInt32(0),
-                                    Date = DateOnly.FromDateTime(reader.GetDateTime(1)),
-                                    TotalScore = reader.GetInt32(2),
-                                    Validated = reader.GetBoolean(3),
-                                    PatientAge = reader.GetInt32(4),
-                                    PatientId = reader.GetInt32(5)
-                                };
-                                assessments.Add(assessment);
+                                int id = reader.GetInt32(0);
+                                List<Exercise> exercises = new List<Exercise>();
+                                DateOnly date = DateOnly.FromDateTime(reader.GetDateTime(1));
+                                bool Validated = reader.GetBoolean(3);
+                                int TotalScore = reader.GetInt32(2);
+                                int PatientAge = reader.GetInt32(4);
+                                int PatientId = reader.GetInt32(5);
+
+                                Assessment newAssessment = new Assessment(id, exercises, date, Validated, TotalScore, PatientAge, PatientId);
+                   
+                                assessments.Add(newAssessment);
                             }
                         }
                     }
@@ -229,13 +227,12 @@ namespace JDM_Casus_Blok4.DAL
                         {
                             if (reader.Read())
                             {
-                                researcher = new Researcher
-                                {
-                                    Id = reader.GetInt32(0),
-                                    FirstName = reader.GetString(1),
-                                    LastName = reader.GetString(2),
-                                    Password = reader.GetString(3)
-                                };
+
+                                int Id = reader.GetInt32(0);
+                                string FirstName = reader.GetString(1);
+                                string LastName = reader.GetString(2);
+
+                                Researcher testresearcher = new Researcher(id, FirstName, LastName);
                             }
                         }
                     }
