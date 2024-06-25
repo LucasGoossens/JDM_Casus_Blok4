@@ -16,7 +16,7 @@ using static System.Formats.Asn1.AsnWriter;
 internal class Program
 {
     static public List<Patient> testPatients = new List<Patient>();
-    static public Doctor testDoctor = new Doctor();
+    static public Doctor testDoctor = new Doctor(2, "Shanon", "Shelton");
     static public List<Exercise> CMAS = new List<Exercise>
     {
         new Exercise(1, "Head elevation", new List<string> { "0 = unable", "1 = 1-9 seconds", "2 = 10-29 seconds", "3 = 30-59 seconds", "4 = 60-119 seconds", "5 = >2 minutes" }),
@@ -37,7 +37,8 @@ internal class Program
     };
     static void Main(string[] args)
     {
-        Console.WriteLine("Hello world!");
+        Console.WriteLine("Hello world");
+
 
         // loop om test/mock/dummy objects toe te voegen 
         for (int i = 0; i < 3; i++)
@@ -45,8 +46,8 @@ internal class Program
 
             DateOnly testDate = DateOnly.FromDateTime(DateTime.Now);
 
-            Assessment testAssessment = new Assessment(i, CMAS, testDate, false, 100);
-            Patient newPatient = new Patient(i, $"testname{i}", "testmail", "testpassword");
+            Assessment testAssessment = new Assessment(i, CMAS, testDate, false, 100, 10,1);
+            Patient newPatient = new Patient(i, $"testname{i}", "testmail", new DateOnly(), 2);
             testPatients.Add(newPatient);
             newPatient.Assessments.Add(testAssessment);
             testDoctor.Patients.Add(newPatient);
@@ -119,7 +120,7 @@ internal class Program
 
     public static void EnterAssessment()
     {       
-        Assessment newAssessment = new Assessment(false);
+        //Assessment newAssessment = new Assessment(false);
 
         foreach (Exercise exerciseTemplate in CMAS)
         {
@@ -150,29 +151,29 @@ internal class Program
             } while (exerciseAssessmentScore > exerciseTemplate.ResultOptions.Count() - 1 || exerciseAssessmentScore < 0);
 
             // hier zit nog geen invoer validatie
-            Exercise newExercise = new Exercise(exerciseTemplate.ExerciseNumber, exerciseTemplate.Name, exerciseAssessmentScore);
-            newAssessment.AddExercise(newExercise);
+            //Exercise newExercise = new Exercise(exerciseTemplate.ExerciseNumber, exerciseTemplate.Name, exerciseAssessmentScore);
+            //newAssessment.AddExercise(newExercise);
             Console.SetCursorPosition(0, Console.CursorTop - 1);
             ClearCurrentConsoleLine();
         }
 
-        newAssessment.Date = DateOnly.FromDateTime(DateTime.Now);        
-        newAssessment.CalculatingScore();
+        //newAssessment.Date = DateOnly.FromDateTime(DateTime.Now);        
+        //newAssessment.CalculatingScore();
 
 
         // alle placeholder data
         // dummy patient
-        testPatients[1].Assessments.Add(newAssessment);        
+        //testPatients[1].Assessments.Add(newAssessment);        
         // dit werkt niet:
         // newAssessment.PatientAge = testPatients[1].DateOfBirth >> int <!> DateOnly
         // Patient.Age maken?
         // of kunt misschien alleen het jaar van DateOnly gebruiken en naar int casten, kijk dinsdag
         // newAssement.PatientAge = patient.Age; 
 
-        newAssessment.PatientId = testPatients[1].Id;
-        newAssessment.PatientAge = 999;
+        //newAssessment.PatientId = testPatients[1].Id;
+        //newAssessment.PatientAge = 999;
         
-        newAssessment.SaveAssessment(); 
+        //newAssessment.SaveAssessment(); 
 
         PatientMenu();
 
@@ -239,7 +240,7 @@ internal class Program
         List<string> patientOptions = new List<string>();
         foreach (Patient patient in parent.Patients)
         {
-            patientOptions.Add($"{patient.FirstName}");
+            patientOptions.Add($"{patient.Firstname}");
         }
         int Patientchoice = DisplayMenuOptions(patientOptions, "Select patient to view.") - 1;
         Patient patientToView = parent.Patients[Patientchoice];
@@ -277,7 +278,7 @@ internal class Program
 
         foreach (Patient patient in testPatients)
         {
-            patientOptions.Add($"{patient.FirstName}");
+            patientOptions.Add($"{patient.Firstname}");
 
         }
         int patientId = DisplayMenuOptions(patientOptions, "Select patient ID to view.") - 1;
@@ -315,7 +316,7 @@ internal class Program
 
     public static void ViewAssessment(Patient patient, User user)
     {
-        Console.WriteLine($"View assessment placeholder: {patient.FirstName}");
+        Console.WriteLine($"View assessment placeholder: {patient.Firstname}");
         List<string> assessmentOptions = new List<string>();
         Console.WriteLine("");
         Console.WriteLine("Assessments:");
@@ -460,7 +461,7 @@ internal class Program
     }
     public static void ChooseFrequency(Patient patient)
     {
-        Console.WriteLine($"The current frequency between assessments {patient.AssessmentFrequentie} days:");
+        Console.WriteLine($"The current frequency between assessments {patient.AssessmentFrequency} days:");
         Console.WriteLine("Enter new frequency (in days):");
         bool validInput = false;
         while (!validInput)

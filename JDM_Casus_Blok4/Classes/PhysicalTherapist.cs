@@ -11,7 +11,17 @@ namespace JDM_Casus_Blok4.Classes
     {
         public List<Patient> Patients { get; set; }
 
-       
+
+        public PhysicalTherapist(int id, string firstname, string lastname) : base(id, firstname, lastname)
+        {
+            Patients = new List<Patient>();
+        }
+
+        public void ValidateAssessment()
+        {
+
+        }
+
         public void EnterAssessment()
         {
 

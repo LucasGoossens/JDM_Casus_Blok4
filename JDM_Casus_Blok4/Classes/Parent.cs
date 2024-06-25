@@ -12,26 +12,26 @@ namespace JDM_Casus_Blok4.Classes
     {
         public List<Patient> Patients { get; set; }
 
-        // Constructor zonder parameters
-        public Parent()
+
+        public Parent(int id, string firstname, string lastname) : base(id, firstname, lastname)
         {
             Patients = new List<Patient>();
         }
 
-        // Constructor met parameters
-        public Parent(int id, string firstName, string lastName, string password, List<Patient> patient)
+        public Parent(int id, string firstname, string lastname, List<Patient> patients) : base(id, firstname, lastname)
         {
-            Id = id;
-            FirstName = firstName;
-            LastName = lastName;
-            Password = password;
-            Patients = patient ?? new List<Patient>();
+            Patients = patients;
         }
-        public static Parent GetParent() 
+
+        public static Parent GetParent()
         {
-            // referentie naar de dal
-            Parent parent = new Parent();
+            DAL.Dal Dal = DAL.Dal.Instance;
+            Parent parent = Dal.GetParent();
             return parent;
+        }
+        public void AddPatient(Patient patient)
+        {
+            Patients.Add(patient);
         }
     }
 }

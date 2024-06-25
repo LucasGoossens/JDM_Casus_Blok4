@@ -9,28 +9,14 @@ namespace JDM_Casus_Blok4.UserClasses
     public abstract class User
     {
         public int Id { get; set; }
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
-        public string Password { get; set; }
+        public string Firstname { get; set; }
+        public string Lastname { get; set; }
 
-        // lege constructor zodat 'base:()' werkt voor nu
-        protected User()
-        {
-
-        }
-        public User(string firstName, string lastName, string password)
-        {
-            FirstName = firstName;
-            LastName = lastName;
-            Password = password;
-        }
-
-        public User(int id, string firstName, string lastName, string password)
+        public User(int id, string firstname, string lastname)
         {
             Id = id;
-            FirstName = firstName;
-            LastName = lastName;
-            Password = password;
+            Firstname = firstname;
+            Lastname = lastname;
         }
     }
 }
