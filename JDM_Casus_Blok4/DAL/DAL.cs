@@ -141,10 +141,43 @@ namespace JDM_Casus_Blok4.DAL
             // Read doctor
         }
 
-        public void GetResearcher()
+        public Researcher GetResearcherById(int id)
         {
-            // Read rearcher
+            Researcher researcher = null;
+            string query = "SELECT Id, UserName, Email, Password FROM Users WHERE Id = @Id AND UserType = 'Researcher'";
+
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(connStr))
+                {
+                    connection.Open();
+                    using (SqlCommand command = new SqlCommand(query, connection))
+                    {
+                        command.Parameters.AddWithValue("@Id", id);
+                        using (SqlDataReader reader = command.ExecuteReader())
+                        {
+                            if (reader.Read())
+                            {
+                                researcher = new Researcher
+                                {
+                                    Id = reader.GetInt32(0),
+                                    FirstName = reader.GetString(1),
+                                    LastName = reader.GetString(2),
+                                    Password = reader.GetString(3)
+                                };
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error fetching Researcher: " + ex.Message);
+            }
+
+            return researcher;
         }
+
 
         // Crud Update:
 

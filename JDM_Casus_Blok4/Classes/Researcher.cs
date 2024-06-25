@@ -17,8 +17,8 @@ namespace JDM_Casus_Blok4.Classes
             InitializeAssessments();
         }
 
-        public Researcher(int id, string userName, string email, string password)
-            : base(id, userName, email, password)
+        public Researcher(int id, string firstName, string lastName, string password)
+            : base(id, firstName, lastName, password)
         {
             InitializeDal();
             InitializeAssessments();
@@ -40,11 +40,16 @@ namespace JDM_Casus_Blok4.Classes
             Assessments.Add(assessment);  // Add to local list
         }
 
-
         public void UpdateAssessment(Assessment assessment)
         {
             dal.UpdateAssessment(assessment);
             // Optionally update the local list as well, if necessary
+        }
+
+        // New method to get a Researcher by ID
+        public Researcher GetResearcherById(int id)
+        {
+            return dal.GetResearcherById(id);
         }
     }
 }
