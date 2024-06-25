@@ -195,10 +195,68 @@ namespace JDM_Casus_Blok4.DAL
             return new Patient(id, firstname, lastname, dateOfBirth, 2);
         }
 
-        public void GetParent()
+        public Parent GetParent()
         {
-            // Read parent
+
+            try
+            {
+                Parent? parent = null;
+                using (SqlConnection connection = new SqlConnection(connStr))
+                {
+                    connection.Open();
+                    string query = "SELECT * FROM [User] Where [Type] = 'parent';";
+                    using SqlCommand command = new SqlCommand(query, connection);
+                    {
+                        using SqlDataReader reader = command.ExecuteReader();
+                        {
+                            while (reader.Read())
+                            {
+                                int id = reader.GetInt32(0);
+                                string firstName = reader.GetString(1);
+                                string lastName = reader.GetString(2);
+                                parent = new Parent(id, firstName, lastName);
+                            }
+                        }
+                    }
+                    string query2 = "SELECT * " +
+                "FROM [User] " +
+                "INNER JOIN [User2User] ON [User].Id = [User2User].UserOne " +
+                "WHERE User2User.UserTwo = @ParentId";
+
+                    using (SqlCommand command2 = new SqlCommand(query2, connection))
+                    {
+                        command2.Parameters.AddWithValue("@ParentId", parent.Id);
+                        using (SqlDataReader reader2 = command2.ExecuteReader())
+                        {
+                            while (reader2.Read())
+                            {
+                                int patientId = reader2.GetInt32(0);
+                                string patientFirstName = reader2.GetString(1);
+                                string patientLastName = reader2.GetString(2);
+                                string patientDateOfBirthString = reader2.GetString(4);
+                                DateOnly patientDateOfBirth = DateOnly.Parse(patientDateOfBirthString);
+                                int? patientAssessmentFrequency = null;
+                                if (!reader2.IsDBNull(5))
+                                {
+                                    patientAssessmentFrequency = reader2.GetInt32(5);
+                                }
+                                Patient patient = new Patient(patientId, patientFirstName, patientLastName, patientDateOfBirth, patientAssessmentFrequency);
+                                parent.Patients.Add(patient);
+                            }
+                        }
+                    }
+                    
+
+                    return parent;
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error getting Parent from database: {ex}");
+                return null;
+            }
         }
+        
 
         public void GetPhysiotherapist()
         {

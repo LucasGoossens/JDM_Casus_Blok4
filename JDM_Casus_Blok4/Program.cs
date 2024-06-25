@@ -37,7 +37,8 @@ internal class Program
     };
     static void Main(string[] args)
     {
-        Console.WriteLine("Hello world!");
+        Console.WriteLine("Hello world");
+
 
         // loop om test/mock/dummy objects toe te voegen 
         for (int i = 0; i < 3; i++)

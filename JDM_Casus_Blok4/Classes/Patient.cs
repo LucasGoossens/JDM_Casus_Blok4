@@ -11,10 +11,10 @@ namespace JDM_Casus_Blok4.Classes
     {
         public DateOnly DateOfBirth { get; set; }
         public List<Assessment> Assessments = new List<Assessment>();
-        public int AssessmentFrequency { get; set; }
+        public int? AssessmentFrequency { get; set; }
 
 
-        public Patient(int id, string firstname, string lastname, DateOnly dateOfBirth, int assessmentFrequency) : base(id, firstname, lastname)
+        public Patient(int id, string firstname, string lastname, DateOnly dateOfBirth, int? assessmentFrequency) : base(id, firstname, lastname)
         {
             DateOfBirth = dateOfBirth;
             AssessmentFrequency = assessmentFrequency;
