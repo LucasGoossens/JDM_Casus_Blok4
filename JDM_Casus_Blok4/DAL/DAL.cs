@@ -359,7 +359,7 @@ namespace JDM_Casus_Blok4.DAL
                                     patientAssessmentFrequency = reader2.GetInt32(5);
                                 }
                                 Patient patient = new Patient(patientId, patientFirstName, patientLastName, patientDateOfBirth, patientAssessmentFrequency);
-                                parent.Patients.Add(patient);
+                                parent.AddPatient(patient);
                             }
                         }
                     }
@@ -425,7 +425,7 @@ namespace JDM_Casus_Blok4.DAL
                                     patientAssessmentFrequency = reader2.GetInt32(5);
                                 }
                                 Patient patient = new Patient(patientId, patientFirstName, patientLastName, patientDateOfBirth, patientAssessmentFrequency);
-                                physicalTherapist.Patients.Add(patient);
+                                physicalTherapist.AddPatient(patient);
                             }
                         }
                     }
@@ -488,7 +488,7 @@ namespace JDM_Casus_Blok4.DAL
                                     patientAssessmentFrequency = reader2.GetInt32(5);
                                 }
                                 Patient patient = new Patient(patientId, patientFirstName, patientLastName, patientDateOfBirth, patientAssessmentFrequency);
-                                doctor.Patients.Add(patient);
+                                doctor.AddPatient(patient);
                             }
                         }
                     }
@@ -499,7 +499,7 @@ namespace JDM_Casus_Blok4.DAL
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error getting PhysicalTherapist from the database: {ex}");
+                Console.WriteLine($"Error getting Doctor from the database: {ex}");
                 return null;
             }
         }
