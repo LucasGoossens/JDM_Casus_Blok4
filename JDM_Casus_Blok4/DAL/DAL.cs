@@ -8,9 +8,9 @@ using System.Threading.Tasks;
 
 namespace JDM_Casus_Blok4.DAL
 {
-    public class Dal
+    public sealed class Dal
     {
-        private static readonly Dal _instance = new Dal();
+        private static Dal _instance = new Dal();
         public string connStr = "Data Source=LUCAS;Initial Catalog=JDMDatabase;Integrated Security=True;Encrypt=False;";
 
         private Dal()
@@ -21,6 +21,10 @@ namespace JDM_Casus_Blok4.DAL
         {
             get
             {
+                if (_instance == null)
+                {
+                    _instance = new Dal();
+                }
                 return _instance;
             }
         }
