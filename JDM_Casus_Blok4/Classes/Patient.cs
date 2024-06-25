@@ -21,6 +21,15 @@ namespace JDM_Casus_Blok4.Classes
             Assessments = new List<Assessment>();
         }
 
+
+        public void GetAssessments()
+        {
+            DAL.Dal Dal = DAL.Dal.Instance;
+            Assessments = Dal.GetAssessmentsById(Id);
+        }
+
+        public void EditAssessmentFrequentie(int assessmentFrequentie)
+
         //public Patient(int id, string firstname, string lastname, List<Assessment> assessments) : base(id, firstname, lastname)
         //{
         //    Assessments = assessments;
