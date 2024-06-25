@@ -8,10 +8,11 @@ using System.Threading.Tasks;
 
 namespace JDM_Casus_Blok4.DAL
 {
-    public class Dal
+    public sealed class Dal
     {
         private static readonly Dal _instance = new Dal();
-        public string connStr = "Data Source=LUCAS;Initial Catalog=JDMDatabase;Integrated Security=True;Encrypt=False;";
+        public string connStr = "Server=tcp:casus-blok-4.database.windows.net,1433;Initial Catalog=JDMDatabase;Persist Security Info=False;User ID=tacoadmin;Password=rN6yPGff856Dq#Fj;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";
+
 
         private Dal()
         {
@@ -21,6 +22,10 @@ namespace JDM_Casus_Blok4.DAL
         {
             get
             {
+                if (_instance == null)
+                {
+                    _instance = new Dal();
+                }
                 return _instance;
             }
         }
@@ -31,6 +36,7 @@ namespace JDM_Casus_Blok4.DAL
             string query = "INSERT INTO Assessment (CompletionDate, TotalScore, Validated, PatientAge, PatientId) VALUES (@CompletionDate, @TotalScore, @Validated, @PatientAge, @PatientId);";
 
             DateTime completionDateTime = assessment.Date.ToDateTime(TimeOnly.MinValue);
+
 
             try
             {
@@ -124,6 +130,71 @@ namespace JDM_Casus_Blok4.DAL
         public void GetPatients()
         {
             // Read patients
+        }
+
+        public Patient GetPatient(int id)
+        {
+
+            using SqlConnection connection = new(connStr);
+            connection.Open();
+            string getPatientQuery = "SELECT [User].Id, [User].Firstname, [User].Lastname, [User].Type, [User].Dateofbirth, a.id, a.CompletionDate, a.TotalScore, a.Validated, a.ValidatorId " +
+                "FROM [User] " +
+                "JOIN Assessment a ON [User].Id = a.PatientId " +
+                "WHERE a.PatientId = @patientId;";
+
+            using SqlCommand command = new(getPatientQuery, connection);
+            command.Parameters.AddWithValue("@patientId", id);
+            command.ExecuteNonQuery();
+
+            using SqlDataReader reader = command.ExecuteReader();
+
+            string firstname = "";
+            string lastname = "";
+            DateOnly dateOfBirth = new DateOnly();
+
+            while (reader.Read())
+            {
+                if (firstname == "")
+                {
+                    firstname = reader[1].ToString();
+                }
+                if (lastname == "")
+                {
+                    lastname = reader[2].ToString();
+                }
+                if (dateOfBirth == new DateOnly())
+                {
+                    string dateString = reader[4].ToString();
+                    DateOnly date = DateOnly.Parse(dateString);
+                }
+                Console.WriteLine(reader[0]);
+                Console.WriteLine(reader[1]);
+                Console.WriteLine(reader[2]);
+                Console.WriteLine(reader[3]);
+                Console.WriteLine(reader[4]);
+                Console.WriteLine("Assessment id");
+                Console.WriteLine(reader[5]);
+                int assessmentId = (int)reader[5];
+                Console.WriteLine("Assessment date");
+                Console.WriteLine(reader[6]);
+                //string assessmentDateString = reader[4].ToString();
+                //DateOnly assessmentDate = DateOnly.Parse(assessmentDateString);
+
+                //Assessment assessment;
+                //if (assessmentDate == null)
+                //{
+                //    Console.WriteLine("Assessmentdate is null");
+                //    assessment = new Assessment(assessmentId);
+                //}
+                //else
+                //{
+                //    Console.WriteLine("Assessmentdate has date");
+                //    //assessment = new Assessment(assessmentId, assessmentDate);
+                //}
+            }
+
+            // To do - assessment frequency
+            return new Patient(id, firstname, lastname, dateOfBirth, 2);
         }
 
         public void GetParent()

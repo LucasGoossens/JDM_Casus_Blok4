@@ -9,9 +9,7 @@ namespace JDM_Casus_Blok4.Classes
     {
         public List<Assessment> Assessments { get; private set; }
 
-        private Dal dal;
-
-        public Researcher() : base()
+        public Researcher(int id, string firstname, string lastname) : base(id, firstname, lastname)
         {
             InitializeDal();
             InitializeAssessments();

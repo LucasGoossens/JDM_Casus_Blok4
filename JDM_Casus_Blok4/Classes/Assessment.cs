@@ -11,17 +11,13 @@ namespace JDM_Casus_Blok4.Classes
     {
         public int Id { get; set; }
         public List<Exercise> Exercises { get; set; }
-        public DateOnly Date { get; set; } // Dit werkt niet automatisch met SQL 'date'-data type, terug converten naar DateTime of  
+        public DateOnly Date { get; set; }
         public bool Validated { get; set; }
         public int? TotalScore { get; set; }
-        public int? ValidatorId { get; set; }
+        public int ValidatorId { get; set; }
         public int PatientAge { get; set; }
         public int PatientId { get; set; }
         public Feedback Feedback { get; set; }
-
-        // from database
-
-        public Assessment() { }
 
         public Assessment(int id, List<Exercise> exercises, DateOnly date, bool validated, int totalScore)
         {
@@ -31,15 +27,6 @@ namespace JDM_Casus_Blok4.Classes
             Validated = validated;
             TotalScore = totalScore;
         }
-        // voor invoer van gebruiker 
-        public Assessment(bool validated)
-        {
-            Exercises = new List<Exercise>();
-            // invoer kind zal false zijn, van fysio true
-            Validated = validated;
-            Date = DateOnly.FromDateTime(DateTime.Now);
-        }
-
 
         public void AddExercise(Exercise exercise)
         {

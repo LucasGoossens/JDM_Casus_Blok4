@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using static System.Formats.Asn1.AsnWriter;
-using System.Xml.Linq;
-
+﻿
 namespace JDM_Casus_Blok4.Classes
 {
     public class Exercise
@@ -18,10 +11,7 @@ namespace JDM_Casus_Blok4.Classes
         public Feedback? Feedback { get; set; }
 
         public List<string> ResultOptions { get; set; }
-        public Exercise()
-        {
 
-        }
         public Exercise(int id, int exerciseNumber, string name, int score, int maxScore, List<string> resultOptions)
         {
             Id = id;
@@ -47,12 +37,7 @@ namespace JDM_Casus_Blok4.Classes
             ResultOptions = resultOptions;
         }
 
-        public Exercise(int exerciseNumber, string name, int score)
-        {
-            ExerciseNumber = exerciseNumber;
-            Name = name;
-            Score = score;
-        }
+
         public void ViewExercise()
         {
             Console.WriteLine($"Exercise number: {ExerciseNumber}");
@@ -61,8 +46,8 @@ namespace JDM_Casus_Blok4.Classes
             Console.WriteLine($"Max score: {MaxScore}");
             if (Feedback != null)
             {
-                Console.WriteLine($"Feedback: {Feedback.Message}");
+                Console.WriteLine($"Feedback: {Feedback?.Message}");
             }
-        }   
+        }
     }
 }
