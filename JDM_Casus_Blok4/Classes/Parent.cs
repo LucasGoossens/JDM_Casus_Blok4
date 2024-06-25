@@ -25,8 +25,13 @@ namespace JDM_Casus_Blok4.Classes
 
         public static Parent GetParent()
         {
-            Parent parent = new Parent(0, "voornaam", "achternaam");
+            DAL.Dal Dal = DAL.Dal.Instance;
+            Parent parent = Dal.GetParent();
             return parent;
+        }
+        public void AddPatient(Patient patient)
+        {
+            Patients.Add(patient);
         }
     }
 }
