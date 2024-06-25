@@ -11,12 +11,12 @@ namespace JDM_Casus_Blok4.Classes
     {
         public List<Assessment> AllAssessments { get; set; }
 
-        public Researcher() : base()
+        public Researcher(int id, string firstname, string lastname) : base(id, firstname, lastname)
         {
             AllAssessments = Assessment.GetAllAssessments();
         }
 
-        
+
 
 
     }

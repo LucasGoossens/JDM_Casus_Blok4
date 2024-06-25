@@ -10,19 +10,28 @@ namespace JDM_Casus_Blok4.Classes
     public class Patient : User
     {
         public DateOnly DateOfBirth { get; set; }
-        public int AssessmentFrequentie { get; set; }
         public List<Assessment> Assessments = new List<Assessment>();
-        public Patient(int id, string firstName, string lastName, string password) : base(id, firstName, lastName, password)
+        public int AssessmentFrequency { get; set; }
+
+
+        public Patient(int id, string firstname, string lastname, DateOnly dateOfBirth, int assessmentFrequency) : base(id, firstname, lastname)
         {
+            DateOfBirth = dateOfBirth;
+            AssessmentFrequency = assessmentFrequency;
             Assessments = new List<Assessment>();
-            AssessmentFrequentie = 0;
         }
 
-        public void EditAssessmentFrequentie(int assessmentFrequentie)
+        //public Patient(int id, string firstname, string lastname, List<Assessment> assessments) : base(id, firstname, lastname)
+        //{
+        //    Assessments = assessments;
+        //}
+
+        public static Patient GetPatient(int id)
         {
-            AssessmentFrequentie = assessmentFrequentie;
+            // Get patient from database
             DAL.Dal Dal = DAL.Dal.Instance;
-            Dal.UpdatePatient(this);
+            Patient patient = Dal.GetPatient(id);
+            return patient;
         }
     }
 }

@@ -11,12 +11,18 @@ namespace JDM_Casus_Blok4.Classes
     public class Doctor : User, IProvider
     {
         public List<Patient> Patients = new List<Patient>();
-
-        public void GiveFeedback(Feedback feedback)
-        {
-            
-        }
+        public List<Parent> PatientParents { get; set; }
+        public void ViewProgression() { }
+        public void ValidateAssessment() { }
+        public void ViewAssessments() { }
+        public void DefineFrequency() { }
         public void CreatePatientAccount() { }
         public void CreateParentAccount(Patient patient) { }
+
+        public Doctor(int id, string firstname, string lastname) : base(id, firstname, lastname)
+        {
+            Patients = new List<Patient>();
+            PatientParents = new List<Parent>();
+        }
     }
 }
