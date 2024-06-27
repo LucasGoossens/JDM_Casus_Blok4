@@ -27,8 +27,9 @@ namespace JDM_Casus_Blok4.Classes
         }
 
         // New method to get a Researcher by ID
-        public Researcher GetResearcherById(int id)
+        public static Researcher GetResearcherById(int id)
         {
+            Dal dal = Dal.Instance;
             return dal.GetResearcherById(id);
         }
     }

@@ -12,6 +12,8 @@ using System.Diagnostics.Metrics;
 using System.Security.Cryptography.X509Certificates;
 using System.ComponentModel;
 using static System.Formats.Asn1.AsnWriter;
+using System.Runtime.Serialization.Formatters;
+using System.Runtime.InteropServices;
 
 internal class Program
 {
@@ -373,6 +375,7 @@ internal class Program
 
     public static void ResearcherMenu()
     {
+        Researcher researcher = Researcher.GetResearcherById(5);
         List<string> options = new List<string> {
                 "View assessments",
             };
@@ -385,14 +388,60 @@ internal class Program
                 MainMenu();
                 break;
             case 1:
-                ViewAssessmentsResearcher();
+                ViewAssessmentsResearcher(researcher);
                 break;
         }
     }
 
-    public static void ViewAssessmentsResearcher()
+    public static void ViewAssessmentsResearcher(Researcher researcherUser)
     {
-        // nog toe te passen 
+        Console.WriteLine("Pick a userId from the patient where you want to view the assessments from.");
+        List<int> PotentialPatientIds = new List<int>();
+        int counter = 1;
+
+        foreach (Assessment assessment in researcherUser.Assessments)
+        {
+            if (!PotentialPatientIds.Contains(assessment.PatientId))
+            {
+                PotentialPatientIds.Add(assessment.PatientId);
+                Console.WriteLine($"{counter}. Id = {assessment.PatientId}");
+                counter++;
+            }
+        }
+
+        bool validInput = false;
+        int PatientIdToOrderBy = 0;
+
+        while (!validInput)
+        {
+            try
+            {
+                int choice = Convert.ToInt32(Console.ReadLine());
+
+                // Ensure the choice is within the valid range
+                if (choice > 0 && choice <= PotentialPatientIds.Count)
+                {
+                    PatientIdToOrderBy = PotentialPatientIds[choice - 1];
+                    validInput = true;
+                }
+                else
+                {
+                    Console.WriteLine("Invalid choice. Please try again.");
+                }
+            }
+            catch
+            {
+                Console.WriteLine("Invalid choice. Please try again.");
+            }
+        }
+
+        foreach (Assessment assessment in researcherUser.Assessments)
+        {
+            if (assessment.PatientId == PatientIdToOrderBy)
+            {
+                assessment.ViewAssessmentResearcher();
+            }
+        }
     }
 
     public static void ClearCurrentConsoleLine()

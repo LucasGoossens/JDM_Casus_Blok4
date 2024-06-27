@@ -531,6 +531,7 @@ namespace JDM_Casus_Blok4.DAL
                         }
                     }
                 }
+
             }
             catch (Exception ex)
             {
