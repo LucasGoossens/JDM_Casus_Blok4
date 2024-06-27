@@ -377,7 +377,7 @@ namespace JDM_Casus_Blok4.DAL
 
 
         public PhysicalTherapist GetPhysiotherapist()
-            // not tested yet
+
         // patients in Physiotherapist hebben geen assessments
 
         {
@@ -441,7 +441,7 @@ namespace JDM_Casus_Blok4.DAL
             }
         }
         public Doctor GetDoctor()
-            // not tested yet
+
         // patients in dokter hebben geen assessments
         {
 
@@ -580,7 +580,35 @@ namespace JDM_Casus_Blok4.DAL
 
         public void UpdatePatient(Patient patient)
         {
-            // Update a patient
+            string query = "UPDATE [User] SET Firstname = @Firstname, Lastname = @Lastname, Dateofbirth = @Dateofbirth, AssessmentFrequency = @AssessmentFrequency WHERE Id = @Id";
+
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(connStr))
+                {
+                    connection.Open();
+                    using (SqlCommand command = new SqlCommand(query, connection))
+                    {
+                        command.Parameters.AddWithValue("@Firstname", patient.Firstname);
+                        command.Parameters.AddWithValue("@Lastname", patient.Lastname);
+                        string databaseDateOfBirth = patient.DateOfBirth.ToString();
+                        command.Parameters.AddWithValue("@Dateofbirth", databaseDateOfBirth);
+                        if (patient.AssessmentFrequency == null)
+                        {
+                            command.Parameters.AddWithValue("@AssessmentFrequency", DBNull.Value);
+                        }
+                        else
+                        { command.Parameters.AddWithValue("@AssessmentFrequency", patient.AssessmentFrequency); }
+                        command.Parameters.AddWithValue("@Id", patient.Id);
+
+                        command.ExecuteNonQuery();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error updating Patient: " + ex.Message);
+            }
         }
 
         public void UpdateFeedback()
