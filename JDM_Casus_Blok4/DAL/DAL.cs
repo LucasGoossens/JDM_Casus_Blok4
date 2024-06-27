@@ -13,7 +13,7 @@ namespace JDM_Casus_Blok4.DAL
     public class Dal
     {
         private static readonly Dal _instance = new Dal();
-        public string connStr = "Server=tcp:casus-blok-4.database.windows.net,1433;Initial Catalog=JDMDatabase;Persist Security Info=False;User ID=tacoadmin;Password=rN6yPGff856Dq#Fj;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";
+        public string connStr = "Server=tcp:casus-blok-4.database.windows.net,1433;Initial Catalog=JDMDatabase;Persist Security Info=False;User ID=tacoadmin;Password=rN6yPGff856Dq#Fj;MultipleActiveResultSets=True;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";
 
         private Dal()
         {
@@ -193,33 +193,55 @@ namespace JDM_Casus_Blok4.DAL
 
         // Crud Read:
 
-        public List<Assessment> GetAssessments()
+        public List<Assessment> GetAllAssessments()
         {
             List<Assessment> assessments = new List<Assessment>();
-            string query = "SELECT * FROM Assessment";
+
+            string assessmentQuery = "SELECT Id, CompletionDate, TotalScore, Validated, PatientAge, PatientId FROM Assessment;";
+            string exerciseQuery = "SELECT Id, AssessmentId, ExerciseNumber, Name, Score, MaxScore FROM Exercise WHERE AssessmentId = @AssessmentId;";
 
             try
             {
                 using (SqlConnection connection = new SqlConnection(connStr))
                 {
                     connection.Open();
-                    using (SqlCommand command = new SqlCommand(query, connection))
+
+                    using (SqlCommand command = new SqlCommand(assessmentQuery, connection))
                     {
                         using (SqlDataReader reader = command.ExecuteReader())
                         {
                             while (reader.Read())
                             {
                                 int id = reader.GetInt32(0);
-                                List<Exercise> exercises = new List<Exercise>();
-                                DateOnly date = DateOnly.FromDateTime(reader.GetDateTime(1));
-                                bool Validated = reader.GetBoolean(3);
-                                int TotalScore = reader.GetInt32(2);
-                                int PatientAge = reader.GetInt32(4);
-                                int PatientId = reader.GetInt32(5);
+                                DateOnly date = DateOnly.FromDateTime(reader. GetDateTime(1));
+                                int totalScore = reader.IsDBNull(2) ? 0 : reader.GetInt32(2);
+                                bool validated = reader.GetBoolean(3);
+                                int patientAge = reader.GetInt32(4);
+                                int patientId = reader.GetInt32(5);
 
-                                Assessment newAssessment = new Assessment(id, exercises, date, Validated, TotalScore, PatientAge, PatientId);
-                   
-                                assessments.Add(newAssessment);
+                                Assessment assessment = new Assessment(id, new List<Exercise>(), date, validated, totalScore, patientAge, patientId);
+
+                                using (SqlCommand exerciseCommand = new SqlCommand(exerciseQuery, connection))
+                                {
+                                    exerciseCommand.Parameters.AddWithValue("@AssessmentId", id);
+
+                                    using (SqlDataReader exerciseReader = exerciseCommand.ExecuteReader())
+                                    {
+                                        while (exerciseReader.Read())
+                                        {
+                                            int exerciseId = exerciseReader.GetInt32(0);
+                                            int exerciseNumber = exerciseReader.GetInt32(2);
+                                            string name = exerciseReader.GetString(3);
+                                            int score = exerciseReader.GetInt32(4);
+                                            int maxScore = exerciseReader.GetInt32(5);
+
+                                            Exercise exercise = new Exercise(exerciseId, exerciseNumber, name, score, maxScore, new List<string>());
+                                            assessment.AddExercise(exercise);
+                                        }
+                                    }
+                                }
+
+                                assessments.Add(assessment);
                             }
                         }
                     }
@@ -227,7 +249,7 @@ namespace JDM_Casus_Blok4.DAL
             }
             catch (Exception ex)
             {
-                Console.WriteLine("Error fetching Assessments: " + ex.Message);
+                Console.WriteLine("Error retrieving Assessments: " + ex.StackTrace + ex.Message);
             }
 
             return assessments;
