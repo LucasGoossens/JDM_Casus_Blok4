@@ -79,5 +79,17 @@ namespace JDM_Casus_Blok4.Classes
             return assessments;
         }
 
+        public void ViewAssessmentResearcher()
+        {
+
+            Console.WriteLine($"Total score: {TotalScore}");
+            Console.WriteLine($"Validated: {Validated}");
+            Console.WriteLine("Exercises:");
+            foreach (Exercise exercise in Exercises)
+            {
+                exercise.ViewExerciseResearcher();
+            }
+        }
+
     }
 }
