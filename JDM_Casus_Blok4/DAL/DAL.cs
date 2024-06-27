@@ -197,7 +197,7 @@ namespace JDM_Casus_Blok4.DAL
         {
             List<Assessment> assessments = new List<Assessment>();
 
-            string assessmentQuery = "SELECT Id, CompletionDate, TotalScore, Validated, PatientAge, PatientId FROM Assessment;";
+            string assessmentQuery = "SELECT Id, CompletionDate, TotalScore, Validated, PatientAge, PatientId FROM Assessment WHERE Validated = 1;";
             string exerciseQuery = "SELECT Id, AssessmentId, ExerciseNumber, Name, Score, MaxScore FROM Exercise WHERE AssessmentId = @AssessmentId;";
 
             try
@@ -528,8 +528,12 @@ namespace JDM_Casus_Blok4.DAL
 
         public Researcher GetResearcherById(int id)
         {
+            // not comletly tested yet
+            List<Assessment> assessments = GetAllAssessments();
+
             Researcher researcher = null;
             string query = "SELECT Id, UserName, Email, Password FROM Users WHERE Id = @Id AND UserType = 'Researcher'";
+            string query2 = "SELECT AssessmentId FROM Assessment_Researcher WHERE ResearcherId = @Id";
 
             try
             {
@@ -552,7 +556,21 @@ namespace JDM_Casus_Blok4.DAL
                             }
                         }
                     }
+                    using (SqlCommand command2 = new SqlCommand(query2, connection))
+                    {
+                        command2.Parameters.AddWithValue("@Id", id);
+                        using (SqlDataReader reader2 = command2.ExecuteReader())
+                        {
+                            while (reader2.Read())
+                            {
+                                int assessmentId = reader2.GetInt32(0);
+                                Assessment assessment = assessments.Find(a => a.Id == assessmentId);
+                                researcher.AddAssessment(assessment);
+                            }
+                        }
+                    }
                 }
+
 
             }
             catch (Exception ex)
