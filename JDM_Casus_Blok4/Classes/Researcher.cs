@@ -14,17 +14,12 @@ namespace JDM_Casus_Blok4.Classes
         }
 
 
-        public void CreateAssessment(Assessment assessment) 
+        public void AddAssessment(Assessment assessment) 
         {
-            dal.CreateAssessment(assessment);
             Assessments.Add(assessment);  // Add to local list
         }
 
-        public void UpdateAssessment(Assessment assessment)
-        {
-            dal.UpdateAssessment(assessment);
-            // Optionally update the local list as well, if necessary
-        }
+
 
         // New method to get a Researcher by ID
         public static Researcher GetResearcherById(int id)
