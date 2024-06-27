@@ -186,9 +186,40 @@ namespace JDM_Casus_Blok4.DAL
 
 
 
-        public void CreateFeedback()
+        public void CreateFeedback(Feedback feedback, string feedBackType, int assessmentId)
         {
-            // Create a new feedback
+            string query = "INSERT INTO [Feedback] (Message, ProviderId) VALUES (@Message, @ProviderId);";
+
+            try
+            {
+                using(SqlConnection connection = new SqlConnection(connStr))
+                {
+                    connection.Open();
+                    using(SqlCommand command = new SqlCommand(query, connection))
+                    {
+                        command.Parameters.AddWithValue("@Message", feedback.Message);
+                        command.Parameters.AddWithValue("@ProviderId", feedback.ProviderId);
+
+                        command.ExecuteNonQuery();
+                    }
+
+                    string query2 = $"UPDATE [{feedBackType}] SET FeedbackId = @FeedbackId WHERE Id = @AssessmentId;";
+
+                    using (SqlCommand command2 = new SqlCommand(query2, connection))
+                    {
+                        command2.Parameters.AddWithValue("@FeedbackId", feedback.Id);
+                        command2.Parameters.AddWithValue("@AssessmentId", assessmentId);
+                        command2.ExecuteNonQuery();
+                    }
+
+                }
+
+               
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Error creating feedback: " + e.Message);
+            }
         }
 
         // Crud Read:
