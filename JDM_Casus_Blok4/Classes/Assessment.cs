@@ -74,9 +74,21 @@ namespace JDM_Casus_Blok4.Classes
 
         public static List<Assessment> GetAllAssessments()
         {
-            List<Assessment> assessments = new List<Assessment>();
-            // get assessments from database
+            DAL.Dal Dal = DAL.Dal.Instance;
+            List<Assessment> assessments = Dal.GetAllAssessments();
             return assessments;
+        }
+
+        public void ViewAssessmentResearcher()
+        {
+
+            Console.WriteLine($"Total score: {TotalScore}");
+            Console.WriteLine($"Validated: {Validated}");
+            Console.WriteLine("Exercises:");
+            foreach (Exercise exercise in Exercises)
+            {
+                exercise.ViewExerciseResearcher();
+            }
         }
 
     }

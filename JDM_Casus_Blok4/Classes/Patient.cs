@@ -42,5 +42,10 @@ namespace JDM_Casus_Blok4.Classes
             Patient patient = Dal.GetPatient(id);
             return patient;
         }
+        public void UpdatePatient()
+        {
+            DAL.Dal Dal = DAL.Dal.Instance;
+            Dal.UpdatePatient(this);
+        }
     }
 }
