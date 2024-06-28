@@ -16,12 +16,12 @@ using System.Diagnostics;
 using System.Runtime.Serialization.Formatters;
 using System.Runtime.InteropServices;
 
-
+ 
 internal class Program
 {
-    static public List<Patient> testPatients = new List<Patient>();
-    static public Doctor testDoctor = Doctor.GetDoctorById(2);
-    static public PhysicalTherapist therapist = new PhysicalTherapist(3, "Wilbur", "Stevens");
+    //static public List<Patient> testPatients = new List<Patient>();
+    //static public Doctor testDoctor = new Doctor(2, "Shanon", "Shelton");
+    //static public PhysicalTherapist therapist = new PhysicalTherapist(3, "Wilbur", "Stevens");
     static public List<Exercise> CMAS = new List<Exercise>
     {
         new Exercise(1, "Head elevation", new List<string> { "0 = unable", "1 = 1-9 seconds", "2 = 10-29 seconds", "3 = 30-59 seconds", "4 = 60-119 seconds", "5 = >2 minutes" }),
@@ -42,32 +42,21 @@ internal class Program
     };
     static void Main(string[] args)
     {
-     
-        //System.Diagnostics.Debug.WriteLine(testDoctor.Firstname);
-        //System.Diagnostics.Debug.WriteLine(testDoctor.Lastname);
-        
+        Console.WriteLine("Hello world");
+
 
         // loop om test/mock/dummy objects toe te voegen 
-        //for (int i = 0; i < 3; i++)
-        //{
-
-        //    DateOnly testDate = DateOnly.FromDateTime(DateTime.Now);
-
-        //    Assessment testAssessment = new Assessment(i, CMAS, testDate, false, 100, 10,1);
-        //    Patient newPatient = new Patient(i, $"testname{i}", "testmail", new DateOnly(), 2);
-        //    testPatients.Add(newPatient);
-        //    newPatient.Assessments.Add(testAssessment);
-        //    testDoctor.Patients.Add(newPatient);
-        //    therapist.Patients.Add(newPatient);
-        //}
-
-        bool flag = true;
-        while (flag)
+        for (int i = 0; i < 3; i++)
         {
-            Console.WriteLine("");
-            MainMenu();
 
-            flag = false;
+            bool flag = true;
+            while (flag)
+            {
+                Console.WriteLine("");
+                MainMenu();
+
+                flag = false;
+            }
         }
     }
 
@@ -86,28 +75,33 @@ internal class Program
         switch (choice)
         {
             case 1:
-                PatientMenu();
+                Patient patient = Patient.GetPatient(1);
+                PatientMenu(patient);
                 break;
             case 2:
                 Parent parent = Parent.GetParent();
                 ParentMenu(parent);
                 break;
             case 3:
-                DoctorMenu(testDoctor);
+                Doctor doctor = Doctor.GetDoctorById(2);
+                DoctorMenu(doctor);
                 break;
             case 4:
-                PhysicalTherapistMenu();
+                PhysicalTherapist therapist = PhysicalTherapist.GetPhysicalTherapist();
+                PhysicalTherapistMenu(therapist);
                 break;
             case 5:
-                ResearcherMenu();
+                Researcher researcher = Researcher.GetResearcherById(5);
+                ResearcherMenu(researcher);
                 break;
         }
     }
 
-    public static void PatientMenu()
+    public static void PatientMenu(Patient patient)
     {
         List<string> options = new List<string> {
                 "Enter assessment",
+                "View assessments",
                 "View progression",
             };
 
@@ -119,19 +113,23 @@ internal class Program
                 MainMenu();
                 break;
             case 1:
-                Assessment newAssessment = EnterAssessment();
+                Assessment newAssessment = EnterAssessment(patient.Id);
                 newAssessment.SaveAssessment();
-                Console.WriteLine("After enter assessment");
+                PatientMenu(patient);
                 break;
             case 2:
-                PatientViewProgression();
+                ViewAssessment(patient, patient);
+                PatientMenu(patient);
+                break;
+            case 3:
+                ViewProgression(patient, patient);
                 break;
         }
     }
 
-    public static Assessment EnterAssessment()
+    public static Assessment EnterAssessment(int patientId)
     {
-        Assessment newAssessment = new Assessment(0, DateOnly.FromDateTime(DateTime.Now), false, 0);
+        Assessment newAssessment = new Assessment(patientId, DateOnly.FromDateTime(DateTime.Now), false, 0);
         List<Exercise> exercises = new List<Exercise>();
 
         foreach (Exercise exerciseTemplate in CMAS)
@@ -171,61 +169,6 @@ internal class Program
         return newAssessment;
     }
 
-    public static void PatientViewProgression()
-    {
-        List<string> options = new List<string> { };
-
-        Console.Clear();
-        Console.WriteLine();
-        int[] data = { 5, 6, 8, 10, 11, 11, 8, 9, 12, 15 };
-
-        // Find the maximum value in the data
-        int maxValue = 0;
-        foreach (int value in data)
-        {
-            if (value > maxValue)
-                maxValue = value;
-        }
-
-        // Draw the graph
-        Console.WriteLine("   ^");
-        Console.WriteLine("   |");
-        Console.WriteLine("   |");
-        for (int i = maxValue; i > 0; i--)
-        {
-            Console.Write($"   |");
-            foreach (int value in data)
-            {
-                if (value >= i)
-                    Console.Write(" * ");
-                else
-                    Console.Write("   ");
-            }
-            Console.WriteLine();
-        }
-
-        // Print the x-axis labels
-        Console.Write("   +");
-        for (int i = 0; i < data.Length * 3; i++)
-        {
-            Console.Write("-");
-        }
-        Console.WriteLine(">");
-        Console.WriteLine("");
-
-        int choice = DisplayMenuOptions(options, "press '0' to go back to the main menu", false);
-
-        switch (choice)
-        {
-            case 0:
-                PatientMenu();
-                break;
-            case 1:
-                break;
-            case 2:
-                break;
-        }
-    }
 
     public static void ParentMenu(Parent parent)
     {
@@ -259,7 +202,8 @@ internal class Program
                 ViewAssessment(patientToView, parent);
                 break;
             case 3:
-                //EnterAssessment();
+                EnterAssessment(patientToView.Id);
+                ParentMenu(parent);
                 break;
             
         }
@@ -298,11 +242,11 @@ internal class Program
                 ViewAssessment(newPatient, doctor);
                 break;
             case 3:
-                ChooseFrequency(newPatient, doctor);
+                ChooseFrequency(newPatient);
                 break;
-                //case 4:
-                //    ValidateAssessment(newPatient, doctor);
-                //    break;
+            //case 4:
+            //    ValidateAssessment(newPatient, doctor);
+            //    break;
 
         }
 
@@ -328,11 +272,11 @@ internal class Program
         Console.WriteLine("");
         Console.WriteLine("1. Go back");
         Console.WriteLine("2. Main menu");
-        Console.WriteLine("4. Give feedback");
         if (assessmentToView.Validated == false)
         {
             Console.WriteLine("3. Validate assessment");
         }
+        Console.WriteLine("4. Give feedback");
         bool validInput = false;
         while (!validInput)
         {
@@ -343,13 +287,29 @@ internal class Program
                 {
                     case 1:
                         validInput = true;
+                        if (user is Patient)
+                        {
+                            PatientMenu(patient);
+                        }
+                        if (user is Parent parent)
+                        {
+                            ParentMenu(parent);
+                        }
+                        else if (user is Doctor doctor)
+                        {
+                            DoctorMenu(doctor);
+                        }
+                        else if (user is PhysicalTherapist therapist)
+                        {
+                            PhysicalTherapistMenu(therapist);
+                        }
                         break;
                     case 2:
                         MainMenu();
                         validInput = true;
                         break;
                     case 3:
-                        if (assessmentToView.Validated == true) break; // "3. Validate assessment" wordt niet geprint, maar kunt zonder deze line nog steeds op 3 drukken
+                        if (assessmentToView.Validated == true) break;
                         assessmentToView.ValidateAssessment(user);
                         break;
                     case 4:
@@ -403,9 +363,8 @@ internal class Program
 
     }
 
-    public static void ResearcherMenu()
+    public static void ResearcherMenu(Researcher researcher)
     {
-        Researcher researcher = Researcher.GetResearcherById(5);
         List<string> options = new List<string> {
                 "View assessments",
             };
@@ -472,7 +431,7 @@ internal class Program
                 assessment.ViewAssessmentResearcher();
             }
         }
-        ResearcherMenu();
+        ResearcherMenu(researcherUser);
     }
 
     public static void ClearCurrentConsoleLine()
@@ -529,6 +488,10 @@ internal class Program
         Console.WriteLine("press enter to continue");
         Console.ReadLine();
         Console.Clear();
+        if (user is Patient patient)
+        {
+            PatientMenu(patient);
+        }
         if (user is Parent parent)
         {
             ParentMenu(parent);
@@ -537,16 +500,15 @@ internal class Program
         {
             DoctorMenu(doctor);
         }
-
-
-    }
-    public static void ChooseFrequency(Patient patient, Doctor doctor)
-    {
-        if (patient.AssessmentFrequency == null)
+        else if (user is PhysicalTherapist therapist)
         {
-            patient.AssessmentFrequency = 0;
+            PhysicalTherapistMenu(therapist);
         }
-        Console.WriteLine($"The current frequency between assessments is {patient.AssessmentFrequency} days:");
+    }
+
+    public static void ChooseFrequency(Patient patient)
+    {
+        Console.WriteLine($"The current frequency between assessments {patient.AssessmentFrequency} days:");
         Console.WriteLine("Enter new frequency (in days):");
         bool validInput = false;
         while (!validInput)
@@ -561,11 +523,11 @@ internal class Program
                 Console.WriteLine("Invalid input. Please try again.");
             }
         }
-        DoctorMenu(doctor);
+        DoctorMenu(Doctor.GetDoctorById(2));
 
     }
 
-    public static void PhysicalTherapistMenu()
+    public static void PhysicalTherapistMenu(PhysicalTherapist therapist)
     {
         List<string> patientListOptions = new List<string>();
         foreach (Patient patient in therapist.Patients)
@@ -591,9 +553,11 @@ internal class Program
                 break;
             case 1:
                 //View assessment
+                ViewAssessment(patientToView, therapist);
                 break;
             case 2:
                 // Enter assessment
+                EnterAssessment(patientToView.Id);
                 break;
         }
     }
