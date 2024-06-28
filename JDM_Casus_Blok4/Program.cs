@@ -43,19 +43,11 @@ internal class Program
     static void Main(string[] args)
     {
         Console.WriteLine("Hello world");
-         //loop om test / mock / dummy objects toe te voegen
-        //for (int i = 0; i < 3; i++)
-        //{
 
-        //    DateOnly testDate = DateOnly.FromDateTime(DateTime.Now);
 
-        //    Assessment testAssessment = new Assessment(i, CMAS, testDate, false, 100, 10, 1);
-        //    Patient newPatient = new Patient(i, $"testname{i}", "testmail", new DateOnly(), 2);
-        //    testPatients.Add(newPatient);
-        //    newPatient.Assessments.Add(testAssessment);
-        //    testDoctor.Patients.Add(newPatient);
-        //    therapist.Patients.Add(newPatient);
-        //}
+        // loop om test/mock/dummy objects toe te voegen 
+        for (int i = 0; i < 3; i++)
+        {
 
         bool flag = true;
         while (flag)
@@ -231,7 +223,8 @@ internal class Program
 
         List<string> options = new List<string>{
             "View Progression",
-            "View Assessment"
+            "View Assessment",
+            "Define assesment frequency"
         };
 
         int choice = DisplayMenuOptions(options, "Doctor menu. - Press 0 to return to main menu");
@@ -248,7 +241,7 @@ internal class Program
                 ViewAssessment(newPatient, doctor);
                 break;
             case 3:
-                ChooseFrequency(newPatient);
+                ChooseFrequency(newPatient, doctor);
                 break;
             //case 4:
             //    ValidateAssessment(newPatient, doctor);
@@ -437,6 +430,7 @@ internal class Program
                 assessment.ViewAssessmentResearcher();
             }
         }
+        ResearcherMenu();
     }
 
     public static void ClearCurrentConsoleLine()
@@ -526,9 +520,9 @@ internal class Program
             catch
             {
                 Console.WriteLine("Invalid input. Please try again.");
-                ChooseFrequency(patient);
             }
         }
+        DoctorMenu(doctor);
 
     }
 

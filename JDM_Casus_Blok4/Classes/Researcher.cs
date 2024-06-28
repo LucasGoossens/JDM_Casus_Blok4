@@ -11,6 +11,7 @@ namespace JDM_Casus_Blok4.Classes
         private Dal dal;
         public Researcher(int id, string firstname, string lastname) : base(id, firstname, lastname)
         {
+            Assessments = new List<Assessment>();
         }
 
 

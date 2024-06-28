@@ -42,21 +42,15 @@ namespace JDM_Casus_Blok4.Classes
         public void AddExercise(Exercise exercise)
         {
             Exercises.Add(exercise);
+            TotalScore += exercise.Score;
         }
-        public void CalculatingScore()
-        {
-            TotalScore = 0;
-            foreach (Exercise exercise in Exercises)
-            {
-                TotalScore += exercise.Score;
-            }
 
-        }
         public void ValidateAssessment(User user)
         {
             Validated = true;
             ValidatorId = user.Id;
-            // add reference to database
+            DAL.Dal Dal = DAL.Dal.Instance;
+            Dal.UpdateAssessment(this);
         }
 
         public void ViewAssessment()

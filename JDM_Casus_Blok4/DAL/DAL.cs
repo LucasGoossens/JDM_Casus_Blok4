@@ -147,7 +147,8 @@ namespace JDM_Casus_Blok4.DAL
             }
         }
 
-        public List<Exercise> GetExercisesByAssessmentId(int id) {
+        public List<Exercise> GetExercisesByAssessmentId(int id)
+        {
             string query = "SELECT * FROM Exercise WHERE AssessmentId = @AssessmentId;";
 
             List<Exercise> exercises = new List<Exercise>();
@@ -193,10 +194,10 @@ namespace JDM_Casus_Blok4.DAL
 
             try
             {
-                using(SqlConnection connection = new SqlConnection(connStr))
+                using (SqlConnection connection = new SqlConnection(connStr))
                 {
                     connection.Open();
-                    using(SqlCommand command = new SqlCommand(query, connection))
+                    using (SqlCommand command = new SqlCommand(query, connection))
                     {
                         command.Parameters.AddWithValue("@Message", feedback.Message);
                         command.Parameters.AddWithValue("@ProviderId", feedback.ProviderId);
@@ -215,7 +216,7 @@ namespace JDM_Casus_Blok4.DAL
 
                 }
 
-               
+
             }
             catch (Exception e)
             {
@@ -245,7 +246,7 @@ namespace JDM_Casus_Blok4.DAL
                             while (reader.Read())
                             {
                                 int id = reader.GetInt32(0);
-                                DateOnly date = DateOnly.FromDateTime(reader. GetDateTime(1));
+                                DateOnly date = DateOnly.FromDateTime(reader.GetDateTime(1));
                                 int totalScore = reader.IsDBNull(2) ? 0 : reader.GetInt32(2);
                                 bool validated = reader.GetBoolean(3);
                                 int patientAge = reader.GetInt32(4);
@@ -417,7 +418,7 @@ namespace JDM_Casus_Blok4.DAL
                             }
                         }
                     }
-                    
+
 
                     return parent;
                 }
@@ -494,14 +495,13 @@ namespace JDM_Casus_Blok4.DAL
                 return null;
             }
         }
-        public Doctor GetDoctor()
+        public List<Doctor> GetAllDoctors()
 
         // patients in dokter hebben geen assessments
         {
-
             try
             {
-                Doctor? doctor = null;
+                List<Doctor> allDoctors = new List<Doctor>();
                 using (SqlConnection connection = new SqlConnection(connStr))
                 {
                     connection.Open();
@@ -515,7 +515,80 @@ namespace JDM_Casus_Blok4.DAL
                                 int id = reader.GetInt32(0);
                                 string firstName = reader.GetString(1);
                                 string lastName = reader.GetString(2);
+                                Doctor newDoctor = new Doctor(id, firstName, lastName);
+                                allDoctors.Add(newDoctor);
+                            }
+                        }
+                    }
+
+                    foreach (Doctor doctor in allDoctors)
+                    {
+                        string query2 = "SELECT * " +
+                    "FROM [User] " +
+                    "INNER JOIN [User2User] ON [User].Id = [User2User].UserOne " +
+                    "WHERE User2User.UserTwo = @doctorId";
+
+                        using (SqlCommand command2 = new SqlCommand(query2, connection))
+                        {
+                            command2.Parameters.AddWithValue("@doctorId", doctor.Id);
+                            using (SqlDataReader reader2 = command2.ExecuteReader())
+                            {
+                                while (reader2.Read())
+                                {
+                                    int patientId = reader2.GetInt32(0);
+                                    string patientFirstName = reader2.GetString(1);
+                                    string patientLastName = reader2.GetString(2);
+                                    string patientDateOfBirthString = reader2.GetString(4);
+                                    DateOnly patientDateOfBirth = DateOnly.Parse(patientDateOfBirthString);
+                                    int? patientAssessmentFrequency = null;
+                                    if (!reader2.IsDBNull(5))
+                                    {
+                                        patientAssessmentFrequency = reader2.GetInt32(5);
+                                    }
+                                    Patient patient = new Patient(patientId, patientFirstName, patientLastName, patientDateOfBirth, patientAssessmentFrequency);
+                                    patient.Assessments = GetAssessmentsById(patientId);
+                                    doctor.AddPatient(patient);
+                                }
+                            }
+                        }
+
+
+                    }
+                    return allDoctors;
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error getting Doctor from the database: {ex}");
+                return null;
+            }
+        }
+
+        public Doctor GetDoctorById(int id)
+        {
+            try
+            {
+                System.Diagnostics.Debug.WriteLine("GetDoctorById");
+                Doctor? doctor = null;
+                using (SqlConnection connection = new SqlConnection(connStr))
+                {
+                    connection.Open();
+                    // probleem hiermee is dat dit niet controleert of de Id die je meegeeft aan deze method
+                    // niet gecontroleerd wordt of deze wel een doctor type is
+                    // maar is geen probleem zolang je alleen een id meegeeft waarvan je weet dat het een doctor is
+                    string query = "SELECT * FROM [User] Where Id = @Id;";
+
+                    using SqlCommand command = new SqlCommand(query, connection);
+                    {
+                        command.Parameters.AddWithValue("@Id", id);
+                        using SqlDataReader reader = command.ExecuteReader();
+                        {
+                            while (reader.Read())
+                            {
+                                string firstName = reader.GetString(1);
+                                string lastName = reader.GetString(2);
                                 doctor = new Doctor(id, firstName, lastName);
+                                System.Diagnostics.Debug.WriteLine(doctor.Firstname);
                             }
                         }
                     }
@@ -542,6 +615,7 @@ namespace JDM_Casus_Blok4.DAL
                                     patientAssessmentFrequency = reader2.GetInt32(5);
                                 }
                                 Patient patient = new Patient(patientId, patientFirstName, patientLastName, patientDateOfBirth, patientAssessmentFrequency);
+                                patient.Assessments = GetAssessmentsById(patientId);
                                 doctor.AddPatient(patient);
                             }
                         }
@@ -553,7 +627,7 @@ namespace JDM_Casus_Blok4.DAL
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error getting Doctor from the database: {ex}");
+                Console.WriteLine($"Error getting Doctor from the database: {ex.StackTrace}");
                 return null;
             }
         }
@@ -564,7 +638,7 @@ namespace JDM_Casus_Blok4.DAL
             List<Assessment> assessments = GetAllAssessments();
 
             Researcher researcher = null;
-            string query = "SELECT Id, UserName, Email, Password FROM Users WHERE Id = @Id AND UserType = 'Researcher'";
+            string query = "SELECT Id, Firstname, Lastname FROM [User] WHERE Id = @Id AND Type = 'Researcher'";
             string query2 = "SELECT AssessmentId FROM Assessment_Researcher WHERE ResearcherId = @Id";
 
             try
@@ -583,8 +657,7 @@ namespace JDM_Casus_Blok4.DAL
                                 int Id = reader.GetInt32(0);
                                 string FirstName = reader.GetString(1);
                                 string LastName = reader.GetString(2);
-
-                                Researcher testresearcher = new Researcher(id, FirstName, LastName);
+                                researcher = new Researcher(id, FirstName, LastName);
                             }
                         }
                     }
@@ -607,7 +680,8 @@ namespace JDM_Casus_Blok4.DAL
             }
             catch (Exception ex)
             {
-                Console.WriteLine("Error fetching Researcher: " + ex.Message);
+                Console.WriteLine("Error fetching Researcher: " + ex.Message + ex.StackTrace);
+                Console.ReadLine();
             }
 
             return researcher;
