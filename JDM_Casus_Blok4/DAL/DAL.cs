@@ -77,6 +77,7 @@ namespace JDM_Casus_Blok4.DAL
 
         public void CreateAssessment(Assessment assessment)
         {
+            // Todo - patientid verwerken in de database wanneer een assessment wordt opgeslagen
             string query = "INSERT INTO Assessment (CompletionDate, TotalScore, Validated, PatientAge, PatientId) " +
                            "OUTPUT INSERTED.Id " +
                            "VALUES (@CompletionDate, @TotalScore, @Validated, @PatientAge, @PatientId);";
