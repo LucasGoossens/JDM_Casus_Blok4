@@ -13,6 +13,8 @@ using System.Security.Cryptography.X509Certificates;
 using System.ComponentModel;
 using static System.Formats.Asn1.AsnWriter;
 using System.Diagnostics;
+using System.Runtime.Serialization.Formatters;
+using System.Runtime.InteropServices;
 
 internal class Program
 {
@@ -39,7 +41,8 @@ internal class Program
     };
     static void Main(string[] args)
     {
-        Console.WriteLine("Hello world!");
+        Console.WriteLine("Hello world");
+
 
         // loop om test/mock/dummy objects toe te voegen 
         for (int i = 0; i < 3; i++)
@@ -47,7 +50,7 @@ internal class Program
 
             DateOnly testDate = DateOnly.FromDateTime(DateTime.Now);
 
-            Assessment testAssessment = new Assessment(i, CMAS, testDate, false, 100);
+            Assessment testAssessment = new Assessment(i, CMAS, testDate, false, 100, 10,1);
             Patient newPatient = new Patient(i, $"testname{i}", "testmail", new DateOnly(), 2);
             testPatients.Add(newPatient);
             newPatient.Assessments.Add(testAssessment);
@@ -306,6 +309,9 @@ internal class Program
         List<string> assessmentOptions = new List<string>();
         Console.WriteLine("");
         Console.WriteLine("Assessments:");
+        
+        patient.GetAssessments();
+
         foreach (Assessment assessmentOption in patient.Assessments)
         {
             assessmentOptions.Add($"{assessmentOption.Date}");
@@ -355,6 +361,7 @@ internal class Program
 
     public static void ResearcherMenu()
     {
+        Researcher researcher = Researcher.GetResearcherById(5);
         List<string> options = new List<string> {
                 "View assessments",
             };
@@ -367,14 +374,60 @@ internal class Program
                 MainMenu();
                 break;
             case 1:
-                ViewAssessmentsResearcher();
+                ViewAssessmentsResearcher(researcher);
                 break;
         }
     }
 
-    public static void ViewAssessmentsResearcher()
+    public static void ViewAssessmentsResearcher(Researcher researcherUser)
     {
-        // nog toe te passen 
+        Console.WriteLine("Pick a userId from the patient where you want to view the assessments from.");
+        List<int> PotentialPatientIds = new List<int>();
+        int counter = 1;
+
+        foreach (Assessment assessment in researcherUser.Assessments)
+        {
+            if (!PotentialPatientIds.Contains(assessment.PatientId))
+            {
+                PotentialPatientIds.Add(assessment.PatientId);
+                Console.WriteLine($"{counter}. Id = {assessment.PatientId}");
+                counter++;
+            }
+        }
+
+        bool validInput = false;
+        int PatientIdToOrderBy = 0;
+
+        while (!validInput)
+        {
+            try
+            {
+                int choice = Convert.ToInt32(Console.ReadLine());
+
+                // Ensure the choice is within the valid range
+                if (choice > 0 && choice <= PotentialPatientIds.Count)
+                {
+                    PatientIdToOrderBy = PotentialPatientIds[choice - 1];
+                    validInput = true;
+                }
+                else
+                {
+                    Console.WriteLine("Invalid choice. Please try again.");
+                }
+            }
+            catch
+            {
+                Console.WriteLine("Invalid choice. Please try again.");
+            }
+        }
+
+        foreach (Assessment assessment in researcherUser.Assessments)
+        {
+            if (assessment.PatientId == PatientIdToOrderBy)
+            {
+                assessment.ViewAssessmentResearcher();
+            }
+        }
     }
 
     public static void ClearCurrentConsoleLine()

@@ -28,13 +28,15 @@ namespace JDM_Casus_Blok4.Classes
             TotalScore = totalScore;
         }
 
-        public Assessment(int id, List<Exercise> exercises, DateOnly date, bool validated, int totalScore)
+        public Assessment(int id, List<Exercise> exercises, DateOnly date, bool validated, int totalScore, int patientAge, int patientId)
         {
             Id = id;
             Exercises = exercises;
             Date = date;
             Validated = validated;
             TotalScore = totalScore;
+            PatientAge = patientAge;
+            PatientId = patientId;
         }
 
         public void AddExercise(Exercise exercise)
@@ -81,9 +83,21 @@ namespace JDM_Casus_Blok4.Classes
 
         public static List<Assessment> GetAllAssessments()
         {
-            List<Assessment> assessments = new List<Assessment>();
-            // get assessments from database
+            DAL.Dal Dal = DAL.Dal.Instance;
+            List<Assessment> assessments = Dal.GetAllAssessments();
             return assessments;
+        }
+
+        public void ViewAssessmentResearcher()
+        {
+
+            Console.WriteLine($"Total score: {TotalScore}");
+            Console.WriteLine($"Validated: {Validated}");
+            Console.WriteLine("Exercises:");
+            foreach (Exercise exercise in Exercises)
+            {
+                exercise.ViewExerciseResearcher();
+            }
         }
 
     }

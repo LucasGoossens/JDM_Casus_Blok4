@@ -1,18 +1,19 @@
 ﻿using JDM_Casus_Blok4.Classes;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace JDM_Casus_Blok4.DAL
 {
-    public sealed class Dal
+    public class Dal
     {
         private static readonly Dal _instance = new Dal();
-        public string connStr = "Server=tcp:casus-blok-4.database.windows.net,1433;Initial Catalog=JDMDatabase;Persist Security Info=False;User ID=tacoadmin;Password=rN6yPGff856Dq#Fj;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";
-
+        public string connStr = "Server=tcp:casus-blok-4.database.windows.net,1433;Initial Catalog=JDMDatabase;Persist Security Info=False;User ID=tacoadmin;Password=rN6yPGff856Dq#Fj;MultipleActiveResultSets=True;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";
 
         private Dal()
         {
@@ -22,18 +23,63 @@ namespace JDM_Casus_Blok4.DAL
         {
             get
             {
-                if (_instance == null)
-                {
-                    _instance = new Dal();
-                }
                 return _instance;
             }
         }
 
         // Crud Create:
+
+        public List<Assessment> GetAssessmentsById(int patientId)
+        {
+            string query = "SELECT * FROM Assessment WHERE PatientId = @PatientId;";
+
+            List<Assessment> assessments = new List<Assessment>();
+
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(connStr))
+                {
+                    connection.Open();
+                    using (SqlCommand command = new SqlCommand(query, connection))
+                    {
+                        command.Parameters.AddWithValue("@PatientId", patientId);
+
+                        using (SqlDataReader reader = command.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                System.Diagnostics.Debug.WriteLine(DateOnly.FromDateTime(reader.GetDateTime(1)));
+
+                                int assessmentId = (int)reader["Id"];
+                                DateOnly assessmentDate = DateOnly.FromDateTime((DateTime)reader["CompletionDate"]);
+                                int assessmentTotalScore = (int)reader["TotalScore"];
+                                bool assessmentValidated = (bool)reader["Validated"];
+                                int assessmentPatientAge = (int)reader["PatientAge"];
+                                int assessmentPatientId = (int)reader["PatientId"];
+
+                                List<Exercise> assessmentExercises = GetExercisesByAssessmentId(assessmentId);
+
+                                Assessment newAssessment = new Assessment(assessmentId, assessmentExercises, assessmentDate, assessmentValidated, assessmentTotalScore, assessmentPatientAge, assessmentPatientId);
+
+                                assessments.Add(newAssessment);
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error getting Assessments: " + ex.Message);
+            }
+            return assessments;
+
+        }
+
         public void CreateAssessment(Assessment assessment)
         {
-            string query = "INSERT INTO Assessment (CompletionDate, TotalScore, Validated, PatientAge, PatientId) VALUES (@CompletionDate, @TotalScore, @Validated, @PatientAge, @PatientId);";
+            string query = "INSERT INTO Assessment (CompletionDate, TotalScore, Validated, PatientAge, PatientId) " +
+                           "OUTPUT INSERTED.Id " +
+                           "VALUES (@CompletionDate, @TotalScore, @Validated, @PatientAge, @PatientId);";
 
             DateTime completionDateTime = assessment.Date.ToDateTime(TimeOnly.MinValue);
 
@@ -51,7 +97,14 @@ namespace JDM_Casus_Blok4.DAL
                         command.Parameters.AddWithValue("@PatientAge", assessment.PatientAge);
                         command.Parameters.AddWithValue("@PatientId", assessment.PatientId);
 
-                        command.ExecuteNonQuery();
+                        int newId = (int)command.ExecuteScalar();
+                        System.Diagnostics.Debug.WriteLine("INSERT ID");
+                        System.Diagnostics.Debug.WriteLine(newId);
+
+                        // weet niet of dit nodig is maar kan handig zijn
+                        assessment.Id = newId;
+
+                        CreateExercise(assessment.Exercises, newId);
                     }
                 }
             }
@@ -62,14 +115,76 @@ namespace JDM_Casus_Blok4.DAL
         }
 
 
-
-
-
-
-        public void CreateExercise()
+        public void CreateExercise(List<Exercise> exercises, int assessmentId)
         {
-            // Create a new exercise
+            string query = "INSERT INTO Exercise (ExerciseNumber, Name, Score, MaxScore, AssessmentId) VALUES (@ExerciseNumber, @Name, @Score, @MaxScore, @AssessmentId);";
+
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(connStr))
+                {
+                    connection.Open();
+                    using (SqlCommand command = new SqlCommand(query, connection))
+                    {
+                        foreach (Exercise exercise in exercises)
+                        {
+                            command.Parameters.Clear();
+                            command.Parameters.AddWithValue("@ExerciseNumber", exercise.ExerciseNumber);
+                            command.Parameters.AddWithValue("@Name", exercise.Name);
+                            command.Parameters.AddWithValue("@Score", exercise.Score);
+                            command.Parameters.AddWithValue("@MaxScore", exercise.MaxScore);
+                            command.Parameters.AddWithValue("@AssessmentId", assessmentId);
+
+                            command.ExecuteNonQuery();
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error saving Exercise: " + ex.Message);
+            }
         }
+
+        public List<Exercise> GetExercisesByAssessmentId(int id) {
+            string query = "SELECT * FROM Exercise WHERE AssessmentId = @AssessmentId;";
+
+            List<Exercise> exercises = new List<Exercise>();
+
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(connStr))
+                {
+                    connection.Open();
+                    using (SqlCommand command = new SqlCommand(query, connection))
+                    {
+                        command.Parameters.AddWithValue("@AssessmentId", id);
+
+                        using (SqlDataReader reader = command.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                int exerciseId = (int)reader["Id"];
+                                int exerciseExerciseNumber = (int)reader["ExerciseNumber"];
+                                string exerciseName = (string)reader["Name"];
+                                int exerciseScore = (int)reader["Score"];
+                                int exerciseMaxScore = (int)reader["MaxScore"];
+
+                                Exercise exercise = new Exercise(exerciseId, exerciseExerciseNumber, exerciseName, exerciseScore, exerciseMaxScore, new List<string>());
+                                exercises.Add(exercise);
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error getting Exercises: " + ex.Message);
+            }
+            return exercises;
+        }
+
+
 
         public void CreateFeedback()
         {
@@ -78,9 +193,66 @@ namespace JDM_Casus_Blok4.DAL
 
         // Crud Read:
 
-        public void GetAssessments()
+        public List<Assessment> GetAllAssessments()
         {
-            // Read exercises
+            List<Assessment> assessments = new List<Assessment>();
+
+            string assessmentQuery = "SELECT Id, CompletionDate, TotalScore, Validated, PatientAge, PatientId FROM Assessment WHERE Validated = 1;";
+            string exerciseQuery = "SELECT Id, AssessmentId, ExerciseNumber, Name, Score, MaxScore FROM Exercise WHERE AssessmentId = @AssessmentId;";
+
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(connStr))
+                {
+                    connection.Open();
+
+                    using (SqlCommand command = new SqlCommand(assessmentQuery, connection))
+                    {
+                        using (SqlDataReader reader = command.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                int id = reader.GetInt32(0);
+                                DateOnly date = DateOnly.FromDateTime(reader. GetDateTime(1));
+                                int totalScore = reader.IsDBNull(2) ? 0 : reader.GetInt32(2);
+                                bool validated = reader.GetBoolean(3);
+                                int patientAge = reader.GetInt32(4);
+                                int patientId = reader.GetInt32(5);
+
+                                Assessment assessment = new Assessment(id, new List<Exercise>(), date, validated, totalScore, patientAge, patientId);
+
+                                using (SqlCommand exerciseCommand = new SqlCommand(exerciseQuery, connection))
+                                {
+                                    exerciseCommand.Parameters.AddWithValue("@AssessmentId", id);
+
+                                    using (SqlDataReader exerciseReader = exerciseCommand.ExecuteReader())
+                                    {
+                                        while (exerciseReader.Read())
+                                        {
+                                            int exerciseId = exerciseReader.GetInt32(0);
+                                            int exerciseNumber = exerciseReader.GetInt32(2);
+                                            string name = exerciseReader.GetString(3);
+                                            int score = exerciseReader.GetInt32(4);
+                                            int maxScore = exerciseReader.GetInt32(5);
+
+                                            Exercise exercise = new Exercise(exerciseId, exerciseNumber, name, score, maxScore, new List<string>());
+                                            assessment.AddExercise(exercise);
+                                        }
+                                    }
+                                }
+
+                                assessments.Add(assessment);
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error retrieving Assessments: " + ex.StackTrace + ex.Message);
+            }
+
+            return assessments;
         }
 
         public void GetExercises()
@@ -163,31 +335,283 @@ namespace JDM_Casus_Blok4.DAL
             return new Patient(id, firstname, lastname, dateOfBirth, 2);
         }
 
-        public void GetParent()
+        public Parent GetParent()
         {
-            // Read parent
+
+            try
+            {
+                Parent? parent = null;
+                using (SqlConnection connection = new SqlConnection(connStr))
+                {
+                    connection.Open();
+                    string query = "SELECT * FROM [User] Where [Type] = 'parent';";
+                    using SqlCommand command = new SqlCommand(query, connection);
+                    {
+                        using SqlDataReader reader = command.ExecuteReader();
+                        {
+                            while (reader.Read())
+                            {
+                                int id = reader.GetInt32(0);
+                                string firstName = reader.GetString(1);
+                                string lastName = reader.GetString(2);
+                                parent = new Parent(id, firstName, lastName);
+                            }
+                        }
+                    }
+                    string query2 = "SELECT * " +
+                "FROM [User] " +
+                "INNER JOIN [User2User] ON [User].Id = [User2User].UserOne " +
+                "WHERE User2User.UserTwo = @ParentId";
+
+                    using (SqlCommand command2 = new SqlCommand(query2, connection))
+                    {
+                        command2.Parameters.AddWithValue("@ParentId", parent.Id);
+                        using (SqlDataReader reader2 = command2.ExecuteReader())
+                        {
+                            while (reader2.Read())
+                            {
+                                int patientId = reader2.GetInt32(0);
+                                string patientFirstName = reader2.GetString(1);
+                                string patientLastName = reader2.GetString(2);
+                                string patientDateOfBirthString = reader2.GetString(4);
+                                DateOnly patientDateOfBirth = DateOnly.Parse(patientDateOfBirthString);
+                                int? patientAssessmentFrequency = null;
+                                if (!reader2.IsDBNull(5))
+                                {
+                                    patientAssessmentFrequency = reader2.GetInt32(5);
+                                }
+                                Patient patient = new Patient(patientId, patientFirstName, patientLastName, patientDateOfBirth, patientAssessmentFrequency);
+                                parent.AddPatient(patient);
+                            }
+                        }
+                    }
+                    
+
+                    return parent;
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error getting Parent from the database: {ex}");
+                return null;
+            }
         }
 
-        public void GetPhysiotherapist()
+
+        public PhysicalTherapist GetPhysiotherapist()
+
+        // patients in Physiotherapist hebben geen assessments
+
         {
-            // Read physiotherapist
+
+            try
+            {
+                PhysicalTherapist? physicalTherapist = null;
+                using (SqlConnection connection = new SqlConnection(connStr))
+                {
+                    connection.Open();
+                    string query = "SELECT * FROM [User] Where [Type] = 'therapist';";
+                    using SqlCommand command = new SqlCommand(query, connection);
+                    {
+                        using SqlDataReader reader = command.ExecuteReader();
+                        {
+                            while (reader.Read())
+                            {
+                                int id = reader.GetInt32(0);
+                                string firstName = reader.GetString(1);
+                                string lastName = reader.GetString(2);
+                                physicalTherapist = new PhysicalTherapist(id, firstName, lastName);
+                            }
+                        }
+                    }
+                    string query2 = "SELECT * " +
+                "FROM [User] " +
+                "INNER JOIN [User2User] ON [User].Id = [User2User].UserOne " +
+                "WHERE User2User.UserTwo = @therapistId";
+
+                    using (SqlCommand command2 = new SqlCommand(query2, connection))
+                    {
+                        command2.Parameters.AddWithValue("@therapistId", physicalTherapist.Id);
+                        using (SqlDataReader reader2 = command2.ExecuteReader())
+                        {
+                            while (reader2.Read())
+                            {
+                                int patientId = reader2.GetInt32(0);
+                                string patientFirstName = reader2.GetString(1);
+                                string patientLastName = reader2.GetString(2);
+                                string patientDateOfBirthString = reader2.GetString(4);
+                                DateOnly patientDateOfBirth = DateOnly.Parse(patientDateOfBirthString);
+                                int? patientAssessmentFrequency = null;
+                                if (!reader2.IsDBNull(5))
+                                {
+                                    patientAssessmentFrequency = reader2.GetInt32(5);
+                                }
+                                Patient patient = new Patient(patientId, patientFirstName, patientLastName, patientDateOfBirth, patientAssessmentFrequency);
+                                physicalTherapist.AddPatient(patient);
+                            }
+                        }
+                    }
+
+
+                    return physicalTherapist;
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error getting PhysicalTherapist from the database: {ex}");
+                return null;
+            }
+        }
+        public Doctor GetDoctor()
+
+        // patients in dokter hebben geen assessments
+        {
+
+            try
+            {
+                Doctor? doctor = null;
+                using (SqlConnection connection = new SqlConnection(connStr))
+                {
+                    connection.Open();
+                    string query = "SELECT * FROM [User] Where [Type] = 'doctor';";
+                    using SqlCommand command = new SqlCommand(query, connection);
+                    {
+                        using SqlDataReader reader = command.ExecuteReader();
+                        {
+                            while (reader.Read())
+                            {
+                                int id = reader.GetInt32(0);
+                                string firstName = reader.GetString(1);
+                                string lastName = reader.GetString(2);
+                                doctor = new Doctor(id, firstName, lastName);
+                            }
+                        }
+                    }
+                    string query2 = "SELECT * " +
+                "FROM [User] " +
+                "INNER JOIN [User2User] ON [User].Id = [User2User].UserOne " +
+                "WHERE User2User.UserTwo = @doctorId";
+
+                    using (SqlCommand command2 = new SqlCommand(query2, connection))
+                    {
+                        command2.Parameters.AddWithValue("@doctorId", doctor.Id);
+                        using (SqlDataReader reader2 = command2.ExecuteReader())
+                        {
+                            while (reader2.Read())
+                            {
+                                int patientId = reader2.GetInt32(0);
+                                string patientFirstName = reader2.GetString(1);
+                                string patientLastName = reader2.GetString(2);
+                                string patientDateOfBirthString = reader2.GetString(4);
+                                DateOnly patientDateOfBirth = DateOnly.Parse(patientDateOfBirthString);
+                                int? patientAssessmentFrequency = null;
+                                if (!reader2.IsDBNull(5))
+                                {
+                                    patientAssessmentFrequency = reader2.GetInt32(5);
+                                }
+                                Patient patient = new Patient(patientId, patientFirstName, patientLastName, patientDateOfBirth, patientAssessmentFrequency);
+                                doctor.AddPatient(patient);
+                            }
+                        }
+                    }
+
+
+                    return doctor;
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error getting Doctor from the database: {ex}");
+                return null;
+            }
         }
 
-        public void GetDoctor()
+        public Researcher GetResearcherById(int id)
         {
-            // Read doctor
+            // not comletly tested yet
+            List<Assessment> assessments = GetAllAssessments();
+
+            Researcher researcher = null;
+            string query = "SELECT Id, UserName, Email, Password FROM Users WHERE Id = @Id AND UserType = 'Researcher'";
+            string query2 = "SELECT AssessmentId FROM Assessment_Researcher WHERE ResearcherId = @Id";
+
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(connStr))
+                {
+                    connection.Open();
+                    using (SqlCommand command = new SqlCommand(query, connection))
+                    {
+                        command.Parameters.AddWithValue("@Id", id);
+                        using (SqlDataReader reader = command.ExecuteReader())
+                        {
+                            if (reader.Read())
+                            {
+
+                                int Id = reader.GetInt32(0);
+                                string FirstName = reader.GetString(1);
+                                string LastName = reader.GetString(2);
+
+                                Researcher testresearcher = new Researcher(id, FirstName, LastName);
+                            }
+                        }
+                    }
+                    using (SqlCommand command2 = new SqlCommand(query2, connection))
+                    {
+                        command2.Parameters.AddWithValue("@Id", id);
+                        using (SqlDataReader reader2 = command2.ExecuteReader())
+                        {
+                            while (reader2.Read())
+                            {
+                                int assessmentId = reader2.GetInt32(0);
+                                Assessment assessment = assessments.Find(a => a.Id == assessmentId);
+                                researcher.AddAssessment(assessment);
+                            }
+                        }
+                    }
+                }
+
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error fetching Researcher: " + ex.Message);
+            }
+
+            return researcher;
         }
 
-        public void GetResearcher()
-        {
-            // Read rearcher
-        }
 
         // Crud Update:
 
-        public void UpdateAssessment()
+        public void UpdateAssessment(Assessment assessment)
         {
-            // Update an assessment
+            string query = "UPDATE Assessment SET CompletionDate = @CompletionDate, TotalScore = @TotalScore, Validated = @Validated, PatientAge = @PatientAge, PatientId = @PatientId WHERE Id = @Id";
+
+            DateTime completionDateTime = assessment.Date.ToDateTime(TimeOnly.MinValue);
+
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(connStr))
+                {
+                    connection.Open();
+                    using (SqlCommand command = new SqlCommand(query, connection))
+                    {
+                        command.Parameters.AddWithValue("@CompletionDate", completionDateTime);
+                        command.Parameters.AddWithValue("@TotalScore", assessment.TotalScore);
+                        command.Parameters.AddWithValue("@Validated", assessment.Validated);
+                        command.Parameters.AddWithValue("@PatientAge", assessment.PatientAge);
+                        command.Parameters.AddWithValue("@PatientId", assessment.PatientId);
+                        command.Parameters.AddWithValue("@Id", assessment.Id);
+
+                        command.ExecuteNonQuery();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error updating Assessment: " + ex.Message);
+            }
         }
 
         public void UpdateExercise()
@@ -197,7 +621,35 @@ namespace JDM_Casus_Blok4.DAL
 
         public void UpdatePatient(Patient patient)
         {
-            // Update a patient
+            string query = "UPDATE [User] SET Firstname = @Firstname, Lastname = @Lastname, Dateofbirth = @Dateofbirth, AssessmentFrequency = @AssessmentFrequency WHERE Id = @Id";
+
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(connStr))
+                {
+                    connection.Open();
+                    using (SqlCommand command = new SqlCommand(query, connection))
+                    {
+                        command.Parameters.AddWithValue("@Firstname", patient.Firstname);
+                        command.Parameters.AddWithValue("@Lastname", patient.Lastname);
+                        string databaseDateOfBirth = patient.DateOfBirth.ToString();
+                        command.Parameters.AddWithValue("@Dateofbirth", databaseDateOfBirth);
+                        if (patient.AssessmentFrequency == null)
+                        {
+                            command.Parameters.AddWithValue("@AssessmentFrequency", DBNull.Value);
+                        }
+                        else
+                        { command.Parameters.AddWithValue("@AssessmentFrequency", patient.AssessmentFrequency); }
+                        command.Parameters.AddWithValue("@Id", patient.Id);
+
+                        command.ExecuteNonQuery();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error updating Patient: " + ex.Message);
+            }
         }
 
         public void UpdateFeedback()

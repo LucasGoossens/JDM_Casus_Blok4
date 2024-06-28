@@ -11,15 +11,24 @@ namespace JDM_Casus_Blok4.Classes
     {
         public DateOnly DateOfBirth { get; set; }
         public List<Assessment> Assessments = new List<Assessment>();
-        public int AssessmentFrequency { get; set; }
+        public int? AssessmentFrequency { get; set; }
 
 
-        public Patient(int id, string firstname, string lastname, DateOnly dateOfBirth, int assessmentFrequency) : base(id, firstname, lastname)
+        public Patient(int id, string firstname, string lastname, DateOnly dateOfBirth, int? assessmentFrequency) : base(id, firstname, lastname)
         {
             DateOfBirth = dateOfBirth;
             AssessmentFrequency = assessmentFrequency;
             Assessments = new List<Assessment>();
         }
+
+
+        public void GetAssessments()
+        {
+            DAL.Dal Dal = DAL.Dal.Instance;
+            Assessments = Dal.GetAssessmentsById(Id);
+        }
+
+        public void EditAssessmentFrequentie(int assessmentFrequentie) { }
 
         //public Patient(int id, string firstname, string lastname, List<Assessment> assessments) : base(id, firstname, lastname)
         //{
@@ -32,6 +41,11 @@ namespace JDM_Casus_Blok4.Classes
             DAL.Dal Dal = DAL.Dal.Instance;
             Patient patient = Dal.GetPatient(id);
             return patient;
+        }
+        public void UpdatePatient()
+        {
+            DAL.Dal Dal = DAL.Dal.Instance;
+            Dal.UpdatePatient(this);
         }
     }
 }
