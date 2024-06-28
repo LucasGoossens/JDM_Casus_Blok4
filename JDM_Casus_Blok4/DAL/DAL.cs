@@ -8,10 +8,11 @@ using System.Threading.Tasks;
 
 namespace JDM_Casus_Blok4.DAL
 {
-    public class Dal
+    public sealed class Dal
     {
         private static readonly Dal _instance = new Dal();
         public string connStr = "Server=tcp:casus-blok-4.database.windows.net,1433;Initial Catalog=JDMDatabase;Persist Security Info=False;User ID=tacoadmin;Password=rN6yPGff856Dq#Fj;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";
+
 
         private Dal()
         {
@@ -21,6 +22,10 @@ namespace JDM_Casus_Blok4.DAL
         {
             get
             {
+                if (_instance == null)
+                {
+                    _instance = new Dal();
+                }
                 return _instance;
             }
         }
