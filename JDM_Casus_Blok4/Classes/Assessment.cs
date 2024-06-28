@@ -35,16 +35,13 @@ namespace JDM_Casus_Blok4.Classes
             Exercises.Add(exercise);
             TotalScore += exercise.Score;
         }
-        public void CalculatingScore()
+
+        public void ValidateAssessment(User user)
         {
-            TotalScore = 0;
-            foreach (Exercise exercise in Exercises)
-            {
-                TotalScore += exercise.Score;
-            }
-
+            Validated = true;
+            ValidatorId = user.Id;
+            // add reference to database
         }
-
 
         public void ViewAssessment()
         {
