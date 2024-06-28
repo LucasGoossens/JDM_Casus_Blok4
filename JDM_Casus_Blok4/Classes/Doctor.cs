@@ -24,12 +24,19 @@ namespace JDM_Casus_Blok4.Classes
             PatientParents = new List<Parent>();
         }
 
-        public static Doctor GetDoctor()
+        public static Doctor GetDoctorById(int id)
         {
             DAL.Dal Dal = DAL.Dal.Instance;
-            Doctor doctor = Dal.GetDoctor();
+            Doctor doctor = Dal.GetDoctorById(id);
             return doctor;
         }
+        public static List<Doctor> GetAllDoctors()
+        {
+            DAL.Dal Dal = DAL.Dal.Instance;
+            List<Doctor> allDoctors = Dal.GetAllDoctors();
+            return allDoctors;
+        }
+
         public void AddPatient(Patient patient)
         {
             Patients.Add(patient);
