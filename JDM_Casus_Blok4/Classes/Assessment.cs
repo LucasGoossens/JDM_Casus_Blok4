@@ -19,6 +19,15 @@ namespace JDM_Casus_Blok4.Classes
         public int PatientId { get; set; }
         public Feedback Feedback { get; set; }
 
+        public Assessment(int id, DateOnly date, bool validated, int totalScore)
+        {
+            Id = id;
+            Exercises = new List<Exercise>();
+            Date = date;
+            Validated = validated;
+            TotalScore = totalScore;
+        }
+
         public Assessment(int id, List<Exercise> exercises, DateOnly date, bool validated, int totalScore)
         {
             Id = id;
