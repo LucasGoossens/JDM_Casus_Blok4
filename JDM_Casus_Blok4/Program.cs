@@ -388,6 +388,7 @@ internal class Program
                 MainMenu();
                 break;
             case 1:
+                Console.Clear();
                 ViewAssessmentsResearcher(researcher);
                 break;
         }
@@ -423,6 +424,7 @@ internal class Program
                 {
                     PatientIdToOrderBy = PotentialPatientIds[choice - 1];
                     validInput = true;
+                    Console.Clear();
                 }
                 else
                 {
@@ -442,6 +444,9 @@ internal class Program
                 assessment.ViewAssessmentResearcher();
             }
         }
+        Console.WriteLine("");
+        Console.WriteLine("1. Researcher menu");
+        Console.ReadLine();
         ResearcherMenu();
     }
 
