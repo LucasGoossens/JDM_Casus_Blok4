@@ -289,7 +289,8 @@ internal class Program
 
         List<string> options = new List<string>{
             "View Progression",
-            "View Assessment"
+            "View Assessment",
+            "Define assesment frequency"
         };
 
         int choice = DisplayMenuOptions(options, "Doctor menu. - Press 0 to return to main menu");
@@ -306,7 +307,7 @@ internal class Program
                 ViewAssessment(newPatient, doctor);
                 break;
             case 3:
-                ChooseFrequency(newPatient);
+                ChooseFrequency(newPatient, doctor);
                 break;
                 //case 4:
                 //    ValidateAssessment(newPatient, doctor);
@@ -508,9 +509,13 @@ internal class Program
 
 
     }
-    public static void ChooseFrequency(Patient patient)
+    public static void ChooseFrequency(Patient patient, Doctor doctor)
     {
-        Console.WriteLine($"The current frequency between assessments {patient.AssessmentFrequency} days:");
+        if (patient.AssessmentFrequency == null)
+        {
+            patient.AssessmentFrequency = 0;
+        }
+        Console.WriteLine($"The current frequency between assessments is {patient.AssessmentFrequency} days:");
         Console.WriteLine("Enter new frequency (in days):");
         bool validInput = false;
         while (!validInput)
@@ -523,9 +528,9 @@ internal class Program
             catch
             {
                 Console.WriteLine("Invalid input. Please try again.");
-                ChooseFrequency(patient);
             }
         }
+        DoctorMenu(doctor);
 
     }
 }
