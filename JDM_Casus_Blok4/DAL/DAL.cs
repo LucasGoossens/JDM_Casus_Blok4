@@ -532,7 +532,7 @@ namespace JDM_Casus_Blok4.DAL
             List<Assessment> assessments = GetAllAssessments();
 
             Researcher researcher = null;
-            string query = "SELECT Id, UserName, Email, Password FROM Users WHERE Id = @Id AND UserType = 'Researcher'";
+            string query = "SELECT Id, Firstname, Lastname FROM [User] WHERE Id = @Id AND Type = 'Researcher'";
             string query2 = "SELECT AssessmentId FROM Assessment_Researcher WHERE ResearcherId = @Id";
 
             try
@@ -551,8 +551,7 @@ namespace JDM_Casus_Blok4.DAL
                                 int Id = reader.GetInt32(0);
                                 string FirstName = reader.GetString(1);
                                 string LastName = reader.GetString(2);
-
-                                Researcher testresearcher = new Researcher(id, FirstName, LastName);
+                                researcher = new Researcher(id, FirstName, LastName);
                             }
                         }
                     }
@@ -575,7 +574,8 @@ namespace JDM_Casus_Blok4.DAL
             }
             catch (Exception ex)
             {
-                Console.WriteLine("Error fetching Researcher: " + ex.Message);
+                Console.WriteLine("Error fetching Researcher: " + ex.Message + ex.StackTrace);
+                Console.ReadLine();
             }
 
             return researcher;
