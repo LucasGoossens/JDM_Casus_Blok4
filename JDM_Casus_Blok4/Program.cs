@@ -49,13 +49,14 @@ internal class Program
         for (int i = 0; i < 3; i++)
         {
 
-        bool flag = true;
-        while (flag)
-        {
-            Console.WriteLine("");
-            MainMenu();
+            bool flag = true;
+            while (flag)
+            {
+                Console.WriteLine("");
+                MainMenu();
 
-            flag = false;
+                flag = false;
+            }
         }
     }
 
@@ -82,7 +83,7 @@ internal class Program
                 ParentMenu(parent);
                 break;
             case 3:
-                Doctor doctor = Doctor.GetDoctor();
+                Doctor doctor = Doctor.GetDoctorById(2);
                 DoctorMenu(doctor);
                 break;
             case 4:
@@ -241,7 +242,7 @@ internal class Program
                 ViewAssessment(newPatient, doctor);
                 break;
             case 3:
-                ChooseFrequency(newPatient, doctor);
+                ChooseFrequency(newPatient);
                 break;
             //case 4:
             //    ValidateAssessment(newPatient, doctor);
@@ -430,7 +431,7 @@ internal class Program
                 assessment.ViewAssessmentResearcher();
             }
         }
-        ResearcherMenu();
+        ResearcherMenu(researcherUser);
     }
 
     public static void ClearCurrentConsoleLine()
@@ -522,7 +523,7 @@ internal class Program
                 Console.WriteLine("Invalid input. Please try again.");
             }
         }
-        DoctorMenu(doctor);
+        DoctorMenu(Doctor.GetDoctorById(2));
 
     }
 
