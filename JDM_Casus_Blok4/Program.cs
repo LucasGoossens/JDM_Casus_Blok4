@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 internal class Program
 {
     static public List<Patient> testPatients = new List<Patient>();
-    static public Doctor testDoctor = new Doctor(2, "Shanon", "Shelton");
+    static public Doctor testDoctor = Doctor.GetDoctorById(2);
     static public PhysicalTherapist therapist = new PhysicalTherapist(3, "Wilbur", "Stevens");
     static public List<Exercise> CMAS = new List<Exercise>
     {
@@ -42,22 +42,24 @@ internal class Program
     };
     static void Main(string[] args)
     {
-        Console.WriteLine("Hello world");
-
+     
+        //System.Diagnostics.Debug.WriteLine(testDoctor.Firstname);
+        //System.Diagnostics.Debug.WriteLine(testDoctor.Lastname);
+        
 
         // loop om test/mock/dummy objects toe te voegen 
-        for (int i = 0; i < 3; i++)
-        {
+        //for (int i = 0; i < 3; i++)
+        //{
 
-            DateOnly testDate = DateOnly.FromDateTime(DateTime.Now);
+        //    DateOnly testDate = DateOnly.FromDateTime(DateTime.Now);
 
-            Assessment testAssessment = new Assessment(i, CMAS, testDate, false, 100, 10,1);
-            Patient newPatient = new Patient(i, $"testname{i}", "testmail", new DateOnly(), 2);
-            testPatients.Add(newPatient);
-            newPatient.Assessments.Add(testAssessment);
-            testDoctor.Patients.Add(newPatient);
-            therapist.Patients.Add(newPatient);
-        }
+        //    Assessment testAssessment = new Assessment(i, CMAS, testDate, false, 100, 10,1);
+        //    Patient newPatient = new Patient(i, $"testname{i}", "testmail", new DateOnly(), 2);
+        //    testPatients.Add(newPatient);
+        //    newPatient.Assessments.Add(testAssessment);
+        //    testDoctor.Patients.Add(newPatient);
+        //    therapist.Patients.Add(newPatient);
+        //}
 
         bool flag = true;
         while (flag)
@@ -267,14 +269,14 @@ internal class Program
     {
         List<string> patientOptions = new List<string>();
 
-        foreach (Patient patient in testPatients)
+        foreach (Patient patient in doctor.Patients)
         {
             patientOptions.Add($"{patient.Firstname}");
 
         }
         int patientId = DisplayMenuOptions(patientOptions, "Select patient ID to view.") - 1;
 
-        Patient newPatient = testPatients.Find(x => x.Id == patientId);
+        Patient newPatient = doctor.Patients.Find(x => x.Id == patientId);
 
         List<string> options = new List<string>{
             "View Progression",
