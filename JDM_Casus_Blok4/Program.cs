@@ -16,6 +16,7 @@ using System.Diagnostics;
 using System.Runtime.Serialization.Formatters;
 using System.Runtime.InteropServices;
 
+
 internal class Program
 {
     static public List<Patient> testPatients = new List<Patient>();
@@ -238,7 +239,7 @@ internal class Program
         {
             "View progression",
             "View assessment",
-            "Enter Assesmet",
+            "Enter Assessment",
         };
 
         int choice = DisplayMenuOptions(options, "Parent menu - press '0' to choose another login");
@@ -258,6 +259,7 @@ internal class Program
             case 3:
                 //EnterAssessment();
                 break;
+            
         }
     }
 
@@ -323,6 +325,7 @@ internal class Program
         Console.WriteLine("");
         Console.WriteLine("1. Go back");
         Console.WriteLine("2. Main menu");
+        Console.WriteLine("4. Give feedback");
         if (assessmentToView.Validated == false)
         {
             Console.WriteLine("3. Validate assessment");
@@ -346,6 +349,9 @@ internal class Program
                         if (assessmentToView.Validated == true) break; // "3. Validate assessment" wordt niet geprint, maar kunt zonder deze line nog steeds op 3 drukken
                         assessmentToView.ValidateAssessment(user);
                         break;
+                    case 4:
+                        GiveFeedback(assessmentToView, patient, user.Id);
+                        break;
                     default:
                         validInput = true;
                         Console.WriteLine("Invalid choice. Please try again.");
@@ -357,6 +363,41 @@ internal class Program
                 Console.WriteLine("Invalid choice. Please try again.");
             }
         }
+    }
+
+    public static void GiveFeedback(Assessment assessment, Patient patient, int providerId)
+    {
+        Console.WriteLine("Select exercise to give feedback");
+        List<string> options = new List<string>();
+        
+        foreach(Exercise exercise in assessment.Exercises)
+        {
+            options.Add($"{exercise.ExerciseNumber}: {exercise.Name}");
+        }
+        options.Add("General feedback");
+
+        int choice = DisplayMenuOptions(options, $"Select exercise to give specific feedback, or press {assessment.Exercises.Count()+1} to give general feedback.");
+
+        if(choice == assessment.Exercises.Count() + 1)
+        {
+
+           Console.WriteLine("Enter feedback:");
+            string feedback = Console.ReadLine();
+            Feedback newFeedback = new Feedback(feedback, providerId);
+            assessment.Feedback = newFeedback;
+            newFeedback.SaveFeedback(providerId, "Assessment", assessment.Id);
+            Console.WriteLine("Feedback saved.");
+        }
+        else
+        {
+            Console.WriteLine("Enter feedback:");
+            string feedback = Console.ReadLine();
+            Feedback newFeedback = new Feedback(feedback, providerId);
+            assessment.Exercises[choice - 1].Feedback = newFeedback;
+            newFeedback.SaveFeedback(providerId, "Exercise", assessment.Exercises[choice - 1].Id);
+            Console.WriteLine("Feedback saved.");
+        }
+
     }
 
     public static void ResearcherMenu()
