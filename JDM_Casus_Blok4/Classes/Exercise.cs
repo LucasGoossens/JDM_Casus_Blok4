@@ -9,7 +9,6 @@ namespace JDM_Casus_Blok4.Classes
         public int Score { get; set; }
         public int MaxScore { get; set; }
         public Feedback? Feedback { get; set; }
-
         public List<string> ResultOptions { get; set; }
 
         public Exercise(int id, int exerciseNumber, string name, int score, int maxScore, List<string> resultOptions)
@@ -21,6 +20,7 @@ namespace JDM_Casus_Blok4.Classes
             MaxScore = maxScore;
             ResultOptions = resultOptions;
         }
+
         public Exercise(int exerciseNumber, string name, int score, int maxScore, List<string> resultOptions)
         {
             ExerciseNumber = exerciseNumber;
