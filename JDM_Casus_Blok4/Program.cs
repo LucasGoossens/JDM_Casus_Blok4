@@ -431,6 +431,9 @@ internal class Program
                 assessment.ViewAssessmentResearcher();
             }
         }
+        Console.WriteLine();
+        Console.WriteLine("1. Researcher Menu");
+        Console.ReadLine();
         ResearcherMenu(researcherUser);
     }
 
