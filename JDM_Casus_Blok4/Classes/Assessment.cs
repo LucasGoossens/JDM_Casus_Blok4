@@ -84,14 +84,17 @@ namespace JDM_Casus_Blok4.Classes
 
         public void ViewAssessmentResearcher()
         {
-
+            Console.WriteLine($"Assesment Id: {Id}");
+            Console.WriteLine($"Date: {Date}");
             Console.WriteLine($"Total score: {TotalScore}");
             Console.WriteLine($"Validated: {Validated}");
             Console.WriteLine("Exercises:");
+            Console.WriteLine();
             foreach (Exercise exercise in Exercises)
             {
                 exercise.ViewExerciseResearcher();
             }
+            Console.WriteLine();
         }
 
     }
