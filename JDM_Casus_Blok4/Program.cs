@@ -99,7 +99,7 @@ internal class Program
                 PhysicalTherapistMenu();
                 break;
             case 5:
-                //ResearcherMenu();
+                ResearcherMenu();
                 break;
         }
     }
@@ -472,6 +472,7 @@ internal class Program
                 assessment.ViewAssessmentResearcher();
             }
         }
+        ResearcherMenu();
     }
 
     public static void ClearCurrentConsoleLine()
