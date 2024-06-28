@@ -40,7 +40,8 @@ namespace JDM_Casus_Blok4.Classes
         {
             Validated = true;
             ValidatorId = user.Id;
-            // add reference to database
+            DAL.Dal Dal = DAL.Dal.Instance;
+            Dal.UpdateAssessment(this);
         }
 
         public void ViewAssessment()
