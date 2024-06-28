@@ -12,6 +12,7 @@ using System.Diagnostics.Metrics;
 using System.Security.Cryptography.X509Certificates;
 using System.ComponentModel;
 using static System.Formats.Asn1.AsnWriter;
+using System.Diagnostics;
 using System.Runtime.Serialization.Formatters;
 using System.Runtime.InteropServices;
 
@@ -20,6 +21,7 @@ internal class Program
 {
     static public List<Patient> testPatients = new List<Patient>();
     static public Doctor testDoctor = new Doctor(2, "Shanon", "Shelton");
+    static public PhysicalTherapist therapist = new PhysicalTherapist(3, "Wilbur", "Stevens");
     static public List<Exercise> CMAS = new List<Exercise>
     {
         new Exercise(1, "Head elevation", new List<string> { "0 = unable", "1 = 1-9 seconds", "2 = 10-29 seconds", "3 = 30-59 seconds", "4 = 60-119 seconds", "5 = >2 minutes" }),
@@ -54,6 +56,7 @@ internal class Program
             testPatients.Add(newPatient);
             newPatient.Assessments.Add(testAssessment);
             testDoctor.Patients.Add(newPatient);
+            therapist.Patients.Add(newPatient);
         }
 
         bool flag = true;
@@ -91,7 +94,8 @@ internal class Program
                 DoctorMenu(testDoctor);
                 break;
             case 4:
-            //PhysicalTherapistMenu();
+                PhysicalTherapistMenu();
+                break;
             case 5:
                 //ResearcherMenu();
                 break;
@@ -113,7 +117,9 @@ internal class Program
                 MainMenu();
                 break;
             case 1:
-                EnterAssessment();
+                Assessment newAssessment = EnterAssessment();
+                newAssessment.SaveAssessment();
+                Console.WriteLine("After enter assessment");
                 break;
             case 2:
                 PatientViewProgression();
@@ -121,9 +127,10 @@ internal class Program
         }
     }
 
-    public static void EnterAssessment()
-    {       
-        //Assessment newAssessment = new Assessment(false);
+    public static Assessment EnterAssessment()
+    {
+        Assessment newAssessment = new Assessment(0, DateOnly.FromDateTime(DateTime.Now), false, 0);
+        List<Exercise> exercises = new List<Exercise>();
 
         foreach (Exercise exerciseTemplate in CMAS)
         {
@@ -153,33 +160,13 @@ internal class Program
                 exerciseAssessmentScore = Convert.ToInt32(Console.ReadLine());
             } while (exerciseAssessmentScore > exerciseTemplate.ResultOptions.Count() - 1 || exerciseAssessmentScore < 0);
 
-            // hier zit nog geen invoer validatie
-            //Exercise newExercise = new Exercise(exerciseTemplate.ExerciseNumber, exerciseTemplate.Name, exerciseAssessmentScore);
-            //newAssessment.AddExercise(newExercise);
+            Exercise newExercise = new Exercise(exerciseTemplate.ExerciseNumber, exerciseTemplate.Name, exerciseAssessmentScore, exerciseTemplate.ResultOptions.Count() - 1, exerciseTemplate.ResultOptions);
+            newAssessment.AddExercise(newExercise);
             Console.SetCursorPosition(0, Console.CursorTop - 1);
             ClearCurrentConsoleLine();
         }
-
-        //newAssessment.Date = DateOnly.FromDateTime(DateTime.Now);        
-        //newAssessment.CalculatingScore();
-
-
-        // alle placeholder data
-        // dummy patient
-        //testPatients[1].Assessments.Add(newAssessment);        
-        // dit werkt niet:
-        // newAssessment.PatientAge = testPatients[1].DateOfBirth >> int <!> DateOnly
-        // Patient.Age maken?
-        // of kunt misschien alleen het jaar van DateOnly gebruiken en naar int casten, kijk dinsdag
-        // newAssement.PatientAge = patient.Age; 
-
-        //newAssessment.PatientId = testPatients[1].Id;
-        //newAssessment.PatientAge = 999;
-        
-        //newAssessment.SaveAssessment(); 
-
-        PatientMenu();
-
+            
+        return newAssessment;
     }
 
     public static void PatientViewProgression()
@@ -568,5 +555,38 @@ internal class Program
             }
         }
 
+    }
+
+    public static void PhysicalTherapistMenu()
+    {
+        List<string> patientListOptions = new List<string>();
+        foreach (Patient patient in therapist.Patients)
+        {
+            patientListOptions.Add($"{patient.Firstname}");
+        }
+        int selectedPatientchoice = DisplayMenuOptions(patientListOptions, "Select patient to view.") - 1;
+        Patient patientToView = therapist.Patients[selectedPatientchoice];
+
+        List<string> options = new List<string>
+        {
+            "View assessment",
+            "Enter assesment",
+        };
+
+        int choice = DisplayMenuOptions(options, "therapist menu - press '0' to choose another login");
+
+
+        switch (choice)
+        {
+            case 0:
+                MainMenu();
+                break;
+            case 1:
+                //View assessment
+                break;
+            case 2:
+                // Enter assessment
+                break;
+        }
     }
 }
