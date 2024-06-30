@@ -11,12 +11,7 @@ namespace JDM_Casus_Blok4.Classes
     {
         public List<Patient> Patients = new List<Patient>();
         public List<Parent> PatientParents { get; set; }
-        public void ViewProgression() { }
-        public void ValidateAssessment() { }
-        public void ViewAssessments() { }
-        public void DefineFrequency() { }
-        public void CreatePatientAccount() { }
-        public void CreateParentAccount(Patient patient) { }
+
 
         public Doctor(int id, string firstname, string lastname) : base(id, firstname, lastname)
         {
