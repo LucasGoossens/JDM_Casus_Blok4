@@ -25,12 +25,7 @@ namespace JDM_Casus_Blok4.Classes
             Doctor doctor = Dal.GetDoctorById(id);
             return doctor;
         }
-        public static List<Doctor> GetAllDoctors()
-        {
-            DAL.Dal Dal = DAL.Dal.Instance;
-            List<Doctor> allDoctors = Dal.GetAllDoctors();
-            return allDoctors;
-        }
+
 
         public void AddPatient(Patient patient)
         {
