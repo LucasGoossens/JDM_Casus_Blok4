@@ -75,10 +75,10 @@ namespace JDM_Casus_Blok4.Classes
             Dal.CreateAssessment(this);
         }
 
-        public static List<Assessment> GetAllAssessments()
+        public static List<Assessment> GetAllValidatedAssessments()
         {
             DAL.Dal Dal = DAL.Dal.Instance;
-            List<Assessment> assessments = Dal.GetAllAssessments();
+            List<Assessment> assessments = Dal.GetAllValidatedAssessments();
             return assessments;
         }
 

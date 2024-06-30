@@ -6,6 +6,7 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Net.Mime.MediaTypeNames;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace JDM_Casus_Blok4.DAL
@@ -14,7 +15,6 @@ namespace JDM_Casus_Blok4.DAL
     {
         private static readonly Dal _instance = new Dal();
         public string connStr = "Server=tcp:casus-blok-4.database.windows.net,1433;Initial Catalog=JDMDatabase;Persist Security Info=False;User ID=tacoadmin;Password=rN6yPGff856Dq#Fj;MultipleActiveResultSets=True;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";
-
         private Dal()
         {
         }
@@ -226,7 +226,7 @@ namespace JDM_Casus_Blok4.DAL
 
         // Crud Read:
 
-        public List<Assessment> GetAllAssessments()
+        public List<Assessment> GetAllValidatedAssessments()
         {
             List<Assessment> assessments = new List<Assessment>();
 
@@ -635,7 +635,7 @@ namespace JDM_Casus_Blok4.DAL
         public Researcher GetResearcherById(int id)
         {
             // not comletly tested yet
-            List<Assessment> assessments = GetAllAssessments();
+            List<Assessment> assessments = GetAllValidatedAssessments();
 
             Researcher researcher = null;
             string query = "SELECT Id, Firstname, Lastname FROM [User] WHERE Id = @Id AND Type = 'Researcher'";
