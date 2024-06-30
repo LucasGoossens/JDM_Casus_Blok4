@@ -282,11 +282,11 @@ internal class Program
         Console.WriteLine("");
         Console.WriteLine("1. Go back");
         Console.WriteLine("2. Main menu");
-        if (assessmentToView.Validated == false && user != patient)
+        if (assessmentToView.Validated == false && user != patient && user is not Parent)
         {
             Console.WriteLine("3. Validate assessment");
         }
-        if (user != patient)
+        if (user != patient && user is not Parent)
         {
             Console.WriteLine("4. Give feedback");
         }
