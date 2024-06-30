@@ -16,7 +16,7 @@ using System.Diagnostics;
 using System.Runtime.Serialization.Formatters;
 using System.Runtime.InteropServices;
 
- 
+
 internal class Program
 {
     //static public List<Patient> testPatients = new List<Patient>();
@@ -129,18 +129,20 @@ internal class Program
 
     public static Assessment EnterAssessment(int patientId)
     {
-        Assessment newAssessment = new Assessment(patientId, DateOnly.FromDateTime(DateTime.Now), false, 0);
-        List<Exercise> exercises = new List<Exercise>();
+        // het enige wat een nieuwe assessment nodig heeft bij het voor de eerste keer aanmaken is de datum, validated = false en de patientId.
+        // de rest wordt in deze method door de gebruiker ingevuld en toegevoegd met {get;set;}
+        Assessment newAssessment = new Assessment(DateOnly.FromDateTime(DateTime.Now), false, patientId);
+        //List<Exercise> exercises = new List<Exercise>();
 
         foreach (Exercise exerciseTemplate in CMAS)
         {
             Console.Clear();
             Console.WriteLine($"Exercise {exerciseTemplate.ExerciseNumber}: {exerciseTemplate.Name}");
             Console.WriteLine("");
-            
+
             foreach (string result in exerciseTemplate.ResultOptions)
             {
-                if(result == "") { break; }
+                if (result == "") { break; }
                 // edge case voor Situps, 
                 // de hoogste te behalen score van alle andere exercises komt overeen met exerciseTemplate.ResultOptions.Count() - 1,
                 // maar Situps heeft subscores,in totaal maximaal 6, dus er zitten lege 6 strings in de list van situps                
@@ -150,22 +152,29 @@ internal class Program
 
             Console.WriteLine("");
             int exerciseAssessmentScore = 0;
+            bool isValidInput = false;
+
             do
             {
-                if(exerciseAssessmentScore > exerciseTemplate.ResultOptions.Count() -1 || exerciseAssessmentScore < 0)
+                Console.WriteLine("Enter your score.");
+                string input = Console.ReadLine();
+                isValidInput = int.TryParse(input, out exerciseAssessmentScore);
+
+                if (!isValidInput || exerciseAssessmentScore > exerciseTemplate.ResultOptions.Count() - 1 || exerciseAssessmentScore < 0)
                 {
                     Console.WriteLine("Invalid choice. Please try again.");
                 }
-                Console.WriteLine("Enter your score.");
-                exerciseAssessmentScore = Convert.ToInt32(Console.ReadLine());
-            } while (exerciseAssessmentScore > exerciseTemplate.ResultOptions.Count() - 1 || exerciseAssessmentScore < 0);
+                
+            } while (!isValidInput || exerciseAssessmentScore > exerciseTemplate.ResultOptions.Count() - 1 || exerciseAssessmentScore < 0);
+
 
             Exercise newExercise = new Exercise(exerciseTemplate.ExerciseNumber, exerciseTemplate.Name, exerciseAssessmentScore, exerciseTemplate.ResultOptions.Count() - 1, exerciseTemplate.ResultOptions);
+
             newAssessment.AddExercise(newExercise);
             Console.SetCursorPosition(0, Console.CursorTop - 1);
             ClearCurrentConsoleLine();
         }
-            
+
         return newAssessment;
     }
 
@@ -205,7 +214,7 @@ internal class Program
                 EnterAssessment(patientToView.Id);
                 ParentMenu(parent);
                 break;
-            
+
         }
     }
 
@@ -244,9 +253,9 @@ internal class Program
             case 3:
                 ChooseFrequency(newPatient);
                 break;
-            //case 4:
-            //    ValidateAssessment(newPatient, doctor);
-            //    break;
+                //case 4:
+                //    ValidateAssessment(newPatient, doctor);
+                //    break;
 
         }
 
@@ -254,11 +263,11 @@ internal class Program
 
     public static void ViewAssessment(Patient patient, User user)
     {
-        Console.WriteLine($"View assessment placeholder: {patient.Firstname}");
+        Console.WriteLine($"View assessment: {patient.Firstname}");
         List<string> assessmentOptions = new List<string>();
         Console.WriteLine("");
         Console.WriteLine("Assessments:");
-        
+
         patient.GetAssessments();
 
         foreach (Assessment assessmentOption in patient.Assessments)
@@ -272,11 +281,14 @@ internal class Program
         Console.WriteLine("");
         Console.WriteLine("1. Go back");
         Console.WriteLine("2. Main menu");
-        if (assessmentToView.Validated == false)
+        if (assessmentToView.Validated == false && user != patient)
         {
             Console.WriteLine("3. Validate assessment");
         }
-        Console.WriteLine("4. Give feedback");
+        if (user != patient)
+        {
+            Console.WriteLine("4. Give feedback");
+        }
         bool validInput = false;
         while (!validInput)
         {
@@ -313,7 +325,8 @@ internal class Program
                         assessmentToView.ValidateAssessment(user);
                         break;
                     case 4:
-                        GiveFeedback(assessmentToView, patient, user.Id);
+                        if (user == patient) break;
+                            GiveFeedback(assessmentToView, patient, user.Id);
                         break;
                     default:
                         validInput = true;
@@ -332,19 +345,19 @@ internal class Program
     {
         Console.WriteLine("Select exercise to give feedback");
         List<string> options = new List<string>();
-        
-        foreach(Exercise exercise in assessment.Exercises)
+
+        foreach (Exercise exercise in assessment.Exercises)
         {
             options.Add($"{exercise.ExerciseNumber}: {exercise.Name}");
         }
         options.Add("General feedback");
 
-        int choice = DisplayMenuOptions(options, $"Select exercise to give specific feedback, or press {assessment.Exercises.Count()+1} to give general feedback.");
+        int choice = DisplayMenuOptions(options, $"Select exercise to give specific feedback, or press {assessment.Exercises.Count() + 1} to give general feedback.");
 
-        if(choice == assessment.Exercises.Count() + 1)
+        if (choice == assessment.Exercises.Count() + 1)
         {
 
-           Console.WriteLine("Enter feedback:");
+            Console.WriteLine("Enter feedback:");
             string feedback = Console.ReadLine();
             Feedback newFeedback = new Feedback(feedback, providerId);
             assessment.Feedback = newFeedback;
