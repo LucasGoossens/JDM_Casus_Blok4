@@ -324,10 +324,12 @@ internal class Program
                     case 3:
                         if (assessmentToView.Validated == true) break;
                         assessmentToView.ValidateAssessment(user);
+                        validInput = true;
                         break;
                     case 4:
                         if (user == patient) break;
                             GiveFeedback(assessmentToView, patient, user.Id);
+                        validInput = true;
                         break;
                     default:
                         validInput = true;
@@ -574,7 +576,8 @@ internal class Program
                 break;
             case 2:
                 // Enter assessment
-                EnterAssessment(patientToView.Id);
+                Assessment newAssessment = EnterAssessment(patientToView.Id);
+                newAssessment.SaveAssessment();                
                 break;
         }
     }
