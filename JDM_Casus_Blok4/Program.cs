@@ -186,8 +186,8 @@ internal class Program
         {
             patientOptions.Add($"{patient.Firstname}");
         }
-        int Patientchoice = DisplayMenuOptions(patientOptions, "Select patient to view.") - 1;
-        Patient patientToView = parent.Patients[Patientchoice];
+        int Patientchoice = DisplayMenuOptions(patientOptions, "Select patient to view.");
+        Patient patientToView = parent.Patients[Patientchoice -1];
 
         List<string> options = new List<string>
         {
@@ -210,8 +210,9 @@ internal class Program
             case 2:
                 ViewAssessment(patientToView, parent);
                 break;
-            case 3:
-                EnterAssessment(patientToView.Id);
+            case 3:                
+                Assessment newAssessment = EnterAssessment(patientToView.Id);
+                newAssessment.SaveAssessment();
                 ParentMenu(parent);
                 break;
 
@@ -227,9 +228,9 @@ internal class Program
             patientOptions.Add($"{patient.Firstname}");
 
         }
-        int patientId = DisplayMenuOptions(patientOptions, "Select patient ID to view.") - 1;
+        int patientId = DisplayMenuOptions(patientOptions, "Select patient ID to view.");
 
-        Patient newPatient = doctor.Patients.Find(x => x.Id == patientId);
+        Patient newPatient = doctor.Patients[patientId-1];
 
         List<string> options = new List<string>{
             "View Progression",

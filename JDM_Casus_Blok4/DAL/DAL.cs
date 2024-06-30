@@ -574,8 +574,7 @@ namespace JDM_Casus_Blok4.DAL
                 using (SqlConnection connection = new SqlConnection(connStr))
                 {
                     connection.Open();
-                    // probleem hiermee is dat dit niet controleert of de Id die je meegeeft aan deze method
-                    // niet gecontroleerd wordt of deze wel een doctor type is
+                    // probleem hiermee is dat dit niet controleert of de Id die je meegeeft aan deze method wel een doctor type is
                     // maar is geen probleem zolang je alleen een id meegeeft waarvan je weet dat het een doctor is
                     string query = "SELECT * FROM [User] Where Id = @Id;";
 
