@@ -17,7 +17,7 @@ namespace JDM_Casus_Blok4.Classes
         public int ValidatorId { get; set; }
         public int PatientAge { get; set; }
         public int PatientId { get; set; }
-        public Feedback Feedback { get; set; }
+        public Feedback? Feedback { get; set; }
 
         // constructor zonder id, id wordt pas aangemaakt zodra het in db wordt opgeslagen. 
         public Assessment(DateOnly date, bool validated, int patientId)
