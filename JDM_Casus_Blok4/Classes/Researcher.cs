@@ -8,7 +8,7 @@ namespace JDM_Casus_Blok4.Classes
     public class Researcher : User
     {
         public List<Assessment> Assessments { get; private set; }
-        private Dal dal;
+ 
         public Researcher(int id, string firstname, string lastname) : base(id, firstname, lastname)
         {
             Assessments = new List<Assessment>();
