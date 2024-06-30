@@ -536,6 +536,7 @@ internal class Program
             {
                 int newFrequency = Convert.ToInt32(Console.ReadLine());
                 validInput = true;
+                patient.EditAssessmentFrequentie(newFrequency);
             }
             catch
             {

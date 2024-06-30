@@ -28,12 +28,14 @@ namespace JDM_Casus_Blok4.Classes
             Assessments = Dal.GetAssessmentsById(Id);
         }
 
-        public void EditAssessmentFrequentie(int assessmentFrequentie) { }
+        public void EditAssessmentFrequentie(int assessmentFrequentie) 
+        {
+            AssessmentFrequency = assessmentFrequentie;
+            DAL.Dal Dal = DAL.Dal.Instance;
+            Dal.UpdatePatient(this);
+        }
 
-        //public Patient(int id, string firstname, string lastname, List<Assessment> assessments) : base(id, firstname, lastname)
-        //{
-        //    Assessments = assessments;
-        //}
+
 
         public static Patient GetPatient(int id)
         {
@@ -42,10 +44,6 @@ namespace JDM_Casus_Blok4.Classes
             Patient patient = Dal.GetPatient(id);
             return patient;
         }
-        public void UpdatePatient()
-        {
-            DAL.Dal Dal = DAL.Dal.Instance;
-            Dal.UpdatePatient(this);
-        }
+
     }
 }
