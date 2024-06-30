@@ -69,7 +69,7 @@ namespace JDM_Casus_Blok4.DAL
             }
             catch (Exception ex)
             {
-                Console.WriteLine("Error getting Assessments: " + ex.Message);
+                System.Diagnostics.Debug.WriteLine(ex.Message);
             }
             return assessments;
 
@@ -112,6 +112,7 @@ namespace JDM_Casus_Blok4.DAL
             catch (Exception ex)
             {
                 Console.WriteLine("Error saving Assessment: " + ex.Message);
+                Console.ReadLine();
             }
         }
 
