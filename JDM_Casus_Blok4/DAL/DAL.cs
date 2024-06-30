@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 using static System.Net.Mime.MediaTypeNames;
@@ -306,68 +307,49 @@ namespace JDM_Casus_Blok4.DAL
 
         public Patient GetPatient(int id)
         {
+            Patient patient = null; 
 
-            using SqlConnection connection = new(connStr);
-            connection.Open();
-            string getPatientQuery = "SELECT [User].Id, [User].Firstname, [User].Lastname, [User].Type, [User].Dateofbirth, a.id, a.CompletionDate, a.TotalScore, a.Validated, a.ValidatorId " +
-                "FROM [User] " +
-                "JOIN Assessment a ON [User].Id = a.PatientId " +
-                "WHERE a.PatientId = @patientId;";
-
-            using SqlCommand command = new(getPatientQuery, connection);
-            command.Parameters.AddWithValue("@patientId", id);
-            command.ExecuteNonQuery();
-
-            using SqlDataReader reader = command.ExecuteReader();
-
-            string firstname = "";
-            string lastname = "";
-            DateOnly dateOfBirth = new DateOnly();
-
-            while (reader.Read())
+            using (SqlConnection connection = new SqlConnection(connStr))
             {
-                if (firstname == "")
-                {
-                    firstname = reader[1].ToString();
-                }
-                if (lastname == "")
-                {
-                    lastname = reader[2].ToString();
-                }
-                if (dateOfBirth == new DateOnly())
-                {
-                    string dateString = reader[4].ToString();
-                    DateOnly date = DateOnly.Parse(dateString);
-                }
-                Console.WriteLine(reader[0]);
-                Console.WriteLine(reader[1]);
-                Console.WriteLine(reader[2]);
-                Console.WriteLine(reader[3]);
-                Console.WriteLine(reader[4]);
-                Console.WriteLine("Assessment id");
-                Console.WriteLine(reader[5]);
-                int assessmentId = (int)reader[5];
-                Console.WriteLine("Assessment date");
-                Console.WriteLine(reader[6]);
-                //string assessmentDateString = reader[4].ToString();
-                //DateOnly assessmentDate = DateOnly.Parse(assessmentDateString);
+                connection.Open();
+                string getPatientQuery = @"
+            SELECT 
+                [User].Id, [User].Firstname, [User].Lastname, [User].Dateofbirth, a.Id AS AssessmentId, a.CompletionDate, a.TotalScore, a.Validated, a.ValidatorId 
+            FROM [User] 
+            LEFT JOIN Assessment a ON [User].Id = a.PatientId 
+            WHERE [User].Id = @patientId;";
 
-                //Assessment assessment;
-                //if (assessmentDate == null)
-                //{
-                //    Console.WriteLine("Assessmentdate is null");
-                //    assessment = new Assessment(assessmentId);
-                //}
-                //else
-                //{
-                //    Console.WriteLine("Assessmentdate has date");
-                //    //assessment = new Assessment(assessmentId, assessmentDate);
-                //}
+                using (SqlCommand command = new SqlCommand(getPatientQuery, connection))
+                {
+                    command.Parameters.AddWithValue("@patientId", id);
+
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            if (patient == null)
+                            {
+                                int patientId = reader.GetInt32(0);
+                                string patientFirstName = reader.GetString(1);
+                                string patientLastName = reader.GetString(2);
+                                string patientDateOfBirthString = reader["Dateofbirth"].ToString();
+                                DateOnly patientDateOfBirth = DateOnly.Parse(patientDateOfBirthString);
+                                int? patientAssessmentFrequency = null;
+                                patient = new Patient(patientId, patientFirstName, patientLastName, patientDateOfBirth, patientAssessmentFrequency);
+                                patient.Assessments = GetAssessmentsById(patientId);
+                            }
+                          
+                        }
+                    }
+                }
             }
 
-            // To do - assessment frequency
-            return new Patient(id, firstname, lastname, dateOfBirth, 2);
+            return patient;
         }
+
+
+
+
 
         public Parent GetParent()
         {
@@ -433,8 +415,6 @@ namespace JDM_Casus_Blok4.DAL
 
 
         public PhysicalTherapist GetPhysiotherapist()
-
-        // patients in Physiotherapist hebben geen assessments
 
         {
 
