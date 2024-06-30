@@ -397,6 +397,7 @@ namespace JDM_Casus_Blok4.DAL
                                     patientAssessmentFrequency = reader2.GetInt32(5);
                                 }
                                 Patient patient = new Patient(patientId, patientFirstName, patientLastName, patientDateOfBirth, patientAssessmentFrequency);
+                                patient.Assessments = GetAssessmentsById(patientId);
                                 parent.AddPatient(patient);
                             }
                         }
