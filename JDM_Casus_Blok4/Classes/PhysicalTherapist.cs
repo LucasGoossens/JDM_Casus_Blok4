@@ -21,20 +21,6 @@ namespace JDM_Casus_Blok4.Classes
             Patients = patients;
         }
 
-        public void ValidateAssessment()
-        {
-
-        }
-
-        public void EnterAssessment()
-        {
-
-        }
-
-        public void CreateAssessment()
-        {
-
-        }
 
         public void AddPatient(Patient patient)
         {
