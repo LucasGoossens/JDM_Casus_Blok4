@@ -28,7 +28,7 @@ namespace JDM_Casus_Blok4.Classes
             Assessments = Dal.GetAssessmentsById(Id);
         }
 
-        public void EditAssessmentFrequentie(int assessmentFrequentie) 
+        public void EditAssessmentFrequency(int assessmentFrequentie) 
         {
             AssessmentFrequency = assessmentFrequentie;
             DAL.Dal Dal = DAL.Dal.Instance;
