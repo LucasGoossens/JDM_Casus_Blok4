@@ -491,14 +491,7 @@ internal class Program
     public static void ViewProgression(Patient patientToVieuw, User user)
     {
         List<int> progression = new List<int>();
-        string progressionString = "";
-        foreach (Assessment assessment in patientToVieuw.Assessments)
-        {
-            if (assessment.Validated)
-            {
-                progressionString += $"{assessment.TotalScore} + ";
-            }
-        }
+        string progressionString = patientToVieuw.GetProgression();
         Console.WriteLine("Progression of assessment scores:");
 
         // checkt of er assessments zijn

@@ -45,5 +45,18 @@ namespace JDM_Casus_Blok4.Classes
             return patient;
         }
 
+        public string GetProgression()
+        {
+            string progressionString = "";
+            foreach (Assessment assessment in Assessments)
+            {
+                if (assessment.Validated)
+                {
+                    progressionString += $"{assessment.TotalScore} + ";
+                }
+            }
+            return progressionString;
+        }
+
     }
 }
